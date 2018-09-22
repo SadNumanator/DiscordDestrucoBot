@@ -12,8 +12,8 @@ namespace DiscordDestrucoBot.Modules
     {
 
         [Command, RequireUserPermission(ChannelPermission.MentionEveryone)]
-        public async Task SayAsync([Remainder] string argumentname)//This is a optional paramater that you type after !ping awawawawa
-        {//Remainder puts all the things into one string
+        public async Task SayAsync([Remainder] string argumentname)
+        {
 
 
             await ReplyAsync(argumentname);
@@ -21,8 +21,8 @@ namespace DiscordDestrucoBot.Modules
 
 
         [Command]
-        public async Task SayAsyncNoEveryone([Remainder] string argumentname)//This is a optional paramater that you type after !ping awawawawa
-        {//Remainder puts all the things into one string
+        public async Task SayAsyncNoEveryone([Remainder] string argumentname)
+        {
 
 
             argumentname = argumentname.Replace("@everyone", "everyone");
