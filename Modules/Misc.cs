@@ -108,9 +108,9 @@ namespace DiscordDestrucoBot.Modules
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task RemoveGuildPrefixAsync()
         {
-            if(DataStorage.KeyExists("Prefix" + Context.Guild.Id))
+            if(!DataStorage.KeyExists("Prefix" + Context.Guild.Id))
             {
-                await ReplyAsync("The prefix is already a default prefix."); return;
+                await ReplyAsync("The prefix is already the default prefix."); return;
             }
 
             string previousprefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);

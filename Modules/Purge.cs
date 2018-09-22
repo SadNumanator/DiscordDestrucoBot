@@ -15,7 +15,7 @@ namespace DiscordDestrucoBot.Modules
     {
 
         //RunMode = RunMode.Async is required for setting delays
-        [Command("purge", RunMode = RunMode.Async)]
+        [Command("purge", RunMode = RunMode.Async)][RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task PurgeAsync(int purging = 0)
         {
             SocketGuildUser sender = (SocketGuildUser)Context.User;
