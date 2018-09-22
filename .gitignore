@@ -21,18 +21,10 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
-bin/Debug/netcoreapp2.0/Resources/DataStorage.json
-bin/Debug/netcoreapp2.0/DiscordDestrucoBot.deps.json
-bin/Debug/netcoreapp2.0/DiscordDestrucoBot.dll
-bin/Debug/netcoreapp2.0/DiscordDestrucoBot.pdb
-bin/Debug/netcoreapp2.0/DiscordDestrucoBot.runtimeconfig.dev.json
-bin/Debug/netcoreapp2.0/DiscordDestrucoBot.runtimeconfig.json
-bin/Debug/netcoreapp2.0/Resources/config.json
 *.pdb
 *.dll
 *.cache
-obj/DiscordDestrucoBot.csproj.nuget.g.props
 *.targets
-obj/Debug/netcoreapp2.0/DiscordDestrucoBot.csproj.FileListAbsolute.txt
+*.json
 obj/Debug/netcoreapp2.0/DiscordDestrucoBot.AssemblyInfo.cs
-obj/project.assets.json
+*.props
