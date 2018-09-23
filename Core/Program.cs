@@ -17,7 +17,6 @@ namespace DiscordDestrucoBot
         }
 
         public static Random rnd = new Random(DateTime.Now.Second);
-        //public static string botPrefix = "?";
 
         private DiscordSocketClient _client;
         private CommandService _commands;

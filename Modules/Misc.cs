@@ -40,7 +40,7 @@ namespace DiscordDestrucoBot.Modules
             {
                 await ReplyAsync("You can't change the owners nickname"); return;
             }
-            if (HighestRole(userArg) >= HighestRole(sender) && !sender.GuildPermissions.Administrator)
+            if (userArg.Hierarchy >= sender.Hierarchy && !sender.GuildPermissions.Administrator)
             {
                 await ReplyAsync("Your role must be equal to or higher to assign the nickname"); return;
             }
@@ -66,9 +66,7 @@ namespace DiscordDestrucoBot.Modules
             int _amountchanged = 0;
             var botuser = Context.Guild.GetUser(Context.Client.CurrentUser.Id);
             foreach (SocketGuildUser userArg in roleArg.Members) {
-                if (userArg.Id == Context.Guild.OwnerId)
-                    continue;
-                if (HighestRole(userArg) >= HighestRole(botuser))
+                if (userArg.Hierarchy >= botuser.Hierarchy)
                     continue;
 
                 await userArg.ModifyAsync(x => { x.Nickname = name; });
@@ -79,6 +77,46 @@ namespace DiscordDestrucoBot.Modules
         }
 
 
+        [Command("embed")]
+        public async Task CreateEmbedAsync(string argStringColor, string _title = "", [Remainder] string _text = "")
+        {
+            string stringColor = argStringColor.ToLowerInvariant();
+            Color color;
+
+            if (stringColor == "red")
+                color = Color.Red;
+            else if (stringColor == "blue")
+                color = Color.Blue;
+            else if (stringColor == "green")
+                color = Color.Green;
+            else if (stringColor == "orange")
+                color = Color.Orange;
+            else if (stringColor == "purple")
+                color = Color.Purple;
+            else if (stringColor == "magenta")
+                color = Color.Magenta;
+            else if (stringColor == "gold")
+                color = Color.Gold;
+            else if (stringColor == "teal")
+                color = Color.Teal;
+            else if (stringColor == "darkgrey")
+                color = Color.DarkerGrey;
+            else
+            {
+                color = Color.LighterGrey;
+                _text = $"{_title} {_text}";
+                _title = argStringColor;
+            }
+
+            EmbedBuilder builder = new EmbedBuilder();//Make the embed builder that makes the embed
+
+            builder.WithTitle(_title)
+                .WithColor(color)
+                .WithDescription(_text);
+
+
+            await ReplyAsync("", false, builder.Build());//This here makes the bot print the embed
+        }
 
 
         /*
@@ -128,10 +166,5 @@ namespace DiscordDestrucoBot.Modules
         }
 
 
-
-        private int HighestRole(SocketGuildUser userArg)
-        {
-            return userArg.Roles.OrderBy(x => x.Position).Last().Position;
-        }
     }
 }

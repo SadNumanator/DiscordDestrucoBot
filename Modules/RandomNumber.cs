@@ -79,12 +79,10 @@ namespace DiscordDestrucoBot.Modules
                     await ReplyAsync("this is a error, please report this to TheSadNumanator#1662");
                 return;
             }
-            if (maxnumber > 8793372036854775806)
+            if (maxnumber > 8000000000054775806)
             {
                 await ReplyAsync("The max value is too much"); return;
             }
-
-
 
             maxnumber = LongRandom(minnumber, maxnumber, Program.rnd);
 

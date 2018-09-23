@@ -19,12 +19,12 @@ namespace DiscordDestrucoBot.Modules
         [Command("giverole")]
         public async Task GiveRoleAsync(IRole roletogive, [Remainder]SocketGuildUser Arguser)//The arguments are the role to give and the user to give it to
         {//Make sure the person assigning the role has a higher role then the assigned role
-            if (roletogive.Position >= AuthorRolePos((SocketGuildUser)Context.User) && Context.User.Id != Context.Guild.OwnerId)
+            if (roletogive.Position >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role needs to be above the role your giving"); return;
             }
             //Make sure the bot assigning the role has a higher role then the assigned role
-            if (roletogive.Position >= AuthorRolePos(Context.Guild.GetUser(Context.Client.CurrentUser.Id)))
+            if (roletogive.Position >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
             {
                 await ReplyAsync("The bots highest role needs to be above the one you are giving"); return;
             }
@@ -39,12 +39,12 @@ namespace DiscordDestrucoBot.Modules
         [Command("giverole")]//Same thing as above but giving a role to every member of a role instead
         public async Task GiveRoleAsync(IRole roletogive, [Remainder]SocketRole roletoadd)
         {
-            if (roletogive.Position >= AuthorRolePos((SocketGuildUser)Context.User))
+            if (roletogive.Position >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role needs to be above the role your giving"); return;
 
             }
-            if (roletogive.Position >= AuthorRolePos(Context.Guild.GetUser(Context.Client.CurrentUser.Id)))
+            if (roletogive.Position >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
             {
                 await ReplyAsync("The bots highest role needs to be above the one you are giving"); return;
             }
@@ -60,11 +60,11 @@ namespace DiscordDestrucoBot.Modules
         [Command("removerole")]//Same thing as above but the oppisite, it removes the role instead
         public async Task RemoveRoleAsync(IRole roletoremove, [Remainder]SocketGuildUser Arguser)
         {
-            if (roletoremove.Position >= AuthorRolePos((SocketGuildUser)Context.User))
+            if (roletoremove.Position >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role needs to be above the role your removing"); return;
             }
-            if (roletoremove.Position >= AuthorRolePos(Context.Guild.GetUser(Context.Client.CurrentUser.Id)))
+            if (roletoremove.Position >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
             {
                 await ReplyAsync("The bots highest role needs to be above the one you are removing"); return;
             }
@@ -78,11 +78,11 @@ namespace DiscordDestrucoBot.Modules
         [Command("removerole")]
         public async Task RemoveRoleAsync(IRole roletotake, [Remainder]SocketRole roletoremove)
         {
-            if (roletoremove.Position >= AuthorRolePos((SocketGuildUser)Context.User))
+            if (roletoremove.Position >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role needs to be above the role your removing"); return;
             }
-            if (roletoremove.Position >= AuthorRolePos(Context.Guild.GetUser(Context.Client.CurrentUser.Id)))
+            if (roletoremove.Position >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
             {
                 await ReplyAsync("The bots highest role needs to be above the one you are removing"); return;
             }
@@ -101,17 +101,5 @@ namespace DiscordDestrucoBot.Modules
 
 
 
-        private static int AuthorRolePos(SocketGuildUser Arguser)
-        {
-            int _rolePosition = 0;
-            foreach (var _role in Arguser.Roles)
-            {
-                if (_role.Position > _rolePosition)
-                {
-                    _rolePosition = _role.Position;
-                }
-            }
-            return _rolePosition;
-        }
     }
 }
