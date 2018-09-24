@@ -104,8 +104,8 @@ namespace DiscordDestrucoBot.Modules
         }
 
 
-        [Command("userinfo perms")]
-        [Alias("whois perms", "whoisperms", "userinfoperms")]
+        [Command("perms")]
+        [Alias("user perms", "userperms" ,"userinfo perms", "whois perms")]
         public async Task UserPermissionsAsync([Remainder]SocketGuildUser userArg)
         {
 
@@ -166,6 +166,52 @@ namespace DiscordDestrucoBot.Modules
             await ReplyAsync("", false, builder.Build());//This here makes the bot print the embed
         }
 
+
+        [Command("channelinfo")]
+        public async Task ChannelInfoAsync(ITextChannel _channel = null)
+        {
+
+            ITextChannel _Channel;
+
+            if (_channel != null)
+                _Channel = _channel;
+            else
+                _Channel = (ITextChannel)Context.Channel;
+
+            StringBuilder correctPermissions = new StringBuilder();
+
+
+            foreach (var permission in _Channel.PermissionOverwrites)
+            {
+                string _rolename = Context.Guild.GetRole(permission.TargetId).Name;
+                if (permission.Permissions.ToDenyList().Count > 0)
+                {
+                    correctPermissions.Append($"**{_rolename} is not able to : **");
+                    correctPermissions.AppendJoin(", ", permission.Permissions.ToDenyList());
+                    correctPermissions.AppendLine();
+                }
+                if (permission.Permissions.ToAllowList().Count > 0)
+                {
+                    correctPermissions.Append($"**{_rolename} is able to : **");
+                    correctPermissions.AppendJoin(", ", permission.Permissions.ToAllowList());
+                    correctPermissions.AppendLine();
+                }
+            }
+            if (correctPermissions.Length == 0)
+                correctPermissions.Append("None");
+
+            EmbedBuilder builder = new EmbedBuilder();//Make the embed builder that makes the embed
+            builder.WithTitle($"Info About : {_Channel.Name}")
+                .WithColor(Color.Blue)
+                .AddField($"**ID**", $"```{_Channel.Id}```", true)
+                .AddField($"**Creation Date**", $"```{_Channel.CreatedAt}```", true)
+            .AddField($"**Perms**", $"{correctPermissions.ToString()}");
+            await ReplyAsync("", false, builder.Build());//This here makes the bot print the embed
+        }
+
+
+
+
         /*
         [Command("hasviewed")]
         public async Task HasViewedAsync([Remainder]SocketGuildUser userArg)
@@ -174,7 +220,7 @@ namespace DiscordDestrucoBot.Modules
         */
 
 
-            private static Color GetColor(SocketGuildUser userArg)
+        private static Color GetColor(SocketGuildUser userArg)
         {
             Color roleColor = Color.LighterGrey;
             int _rolePosition = 0;

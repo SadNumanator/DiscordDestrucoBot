@@ -38,8 +38,11 @@ namespace DiscordDestrucoBot.Modules
             var messages = await Context.Channel.GetMessagesAsync(purging).FlattenAsync(); //purging is the value
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
 
-
-            if (purging >= 100)
+            if (purging >= 500)
+                purgemessage = @"```csharp
+#̨᷇͊᷀͠ͅ𝐈̱̤̠̓̋͞͞𝐧́̇̈́̋᷆𝐧͖͕̓𝐨͙͉̯̖҆᷄̈́̎𝐜̩̗ͭ͗𝐞͎̫҃̃ͥͦ͛͜𝐧̷̟̫́̈𝐭ͥ҃̀᷁ͣ𝐬̖ͪ̑᷆ ͉̃ͭ͋҄͞𝐏̭͓ͣ̊̽͒𝐮̰ͮ𝐫̶͕̌͘ͅ𝐠̡̲̗᷄͢𝐞̸̲͊͌̀𝐝̖̩̥̣̈́ͮ!̨̉͠
+```";//This will show up as "#Innocents Purged" in fancy bold zalgo^
+            else if (purging >= 100)
                 purgemessage = @"```csharp
 #𝐈𝐧𝐧𝐨𝐜𝐞𝐧𝐭𝐬 𝐏𝐮𝐫𝐠𝐞𝐝!
 ```";

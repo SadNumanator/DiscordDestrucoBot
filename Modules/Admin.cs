@@ -55,7 +55,34 @@ namespace DiscordDestrucoBot.Modules
 
 
 
+        [Command("changeprefix")]
+        [Alias("setprefix")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task ChangeGuildPrefixAsync(string prefix)
+        {
+            string previousprefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
 
+            DataStorage.AddPair("Prefix" + Context.Guild.Id, prefix);
+            await ReplyAsync($"The previous prefix was `{previousprefix}`. \nThe new prefix is now `{DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id)}` it was set by {Context.User.Mention}. \nRemember you can use {Context.Client.CurrentUser.Mention} as a prefix.");
+        }
+
+        [Command("removeprefix")]
+        [Alias("defaultprefix")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task RemoveGuildPrefixAsync()
+        {
+            if (!DataStorage.KeyExists("Prefix" + Context.Guild.Id))
+            {
+                await ReplyAsync("The prefix is already the default prefix."); return;
+            }
+
+            string previousprefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+
+            if (DataStorage.KeyExists("Prefix" + Context.Guild.Id))
+                DataStorage.RemoveKey("Prefix" + Context.Guild.Id);
+
+            await ReplyAsync($"The previous prefix was `{previousprefix}`. \nThe new prefix is now `{Config.bot.defaultcmdPrefix}` it was set by {Context.User.Mention}");
+        }
 
 
     }

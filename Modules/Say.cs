@@ -15,8 +15,8 @@ namespace DiscordDestrucoBot.Modules
         public async Task SayAsync([Remainder] string argumentname)
         {
 
-
-            await ReplyAsync(argumentname);
+            await ReplyAsync('\u200B' + argumentname);
+            //the '\u200B' will prevent other bots from picking up on the message
         }
 
 
@@ -28,7 +28,7 @@ namespace DiscordDestrucoBot.Modules
             argumentname = argumentname.Replace("@everyone", "everyone");
             argumentname = argumentname.Replace("@here", "here");
 
-            await ReplyAsync(argumentname);
+            await ReplyAsync('\u200B' + argumentname);
         }
         
     }
