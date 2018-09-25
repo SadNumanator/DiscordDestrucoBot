@@ -25,32 +25,51 @@ namespace DiscordDestrucoBot.Modules
             , new Emoji("\U00000036\U000020e3"), new Emoji("\U00000037\U000020e3")
             , new Emoji("\U00000038\U000020e3"), new Emoji("\U00000039\U000020e3")};
 
+            Emoji back = new Emoji("🔄");
+            RestUserMessage helpMessage = null;
+            EmbedBuilder builder;
+
+            int[] digitCounts = new int[digits.Length];
+            const int fulltimer = 40;
+
+
+        Start:
 
             int looping = 0;
 
             string prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
 
-            EmbedBuilder builder = new EmbedBuilder();
+            builder = new EmbedBuilder();
             builder.WithTitle("Help-" + looping).WithColor(Color.Blue)
                 .WithDescription("**Info** 1\n\n**Fun** 2\n\n**Misc** 3\n\n**Admin** 4 \n\n" +
                 "Press one of the reaction numbers to go to the labeled menu.");
 
-
-            var helpMessage = await Context.Channel.SendMessageAsync("", false, builder.Build());
-
-            await helpMessage.AddReactionAsync(digits[1]);
-            await helpMessage.AddReactionAsync(digits[2]);
-            await helpMessage.AddReactionAsync(digits[3]);
-            await helpMessage.AddReactionAsync(digits[4]);
-            await helpMessage.AddReactionAsync(digits[5]);
+            if (helpMessage == null)
+                helpMessage = await Context.Channel.SendMessageAsync("", false, builder.Build());
+            else
+                await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
 
 
 
-            int[] digitCounts = new int[digits.Length];
-            const int fulltimer = 40;
+
+            await helpMessage.UpdateAsync();
+
+            if (!helpMessage.Reactions.ContainsKey(digits[1]))
+                await helpMessage.AddReactionAsync(digits[1]);
+            if (!helpMessage.Reactions.ContainsKey(digits[2]))
+                await helpMessage.AddReactionAsync(digits[2]);
+            if (!helpMessage.Reactions.ContainsKey(digits[3]))
+                await helpMessage.AddReactionAsync(digits[3]);
+            if (!helpMessage.Reactions.ContainsKey(digits[4]))
+                await helpMessage.AddReactionAsync(digits[4]);
+            if (!helpMessage.Reactions.ContainsKey(digits[1]))
+                await helpMessage.AddReactionAsync(digits[5]);
+
+
+            Middle:
+
             int timer = fulltimer;
-
-            while (looping == 0)
+            while (true)
             {
 
                 await helpMessage.UpdateAsync();
@@ -58,7 +77,7 @@ namespace DiscordDestrucoBot.Modules
                     digitCounts[i] = helpMessage.Reactions.GetValueOrDefault(digits[i]).ReactionCount;
 
                 //INFO
-                if (digitCounts[1] > 1)
+                if (digitCounts[1] > 1 || looping == 1)
                 {
                     looping = 1;
 
@@ -78,19 +97,17 @@ namespace DiscordDestrucoBot.Modules
 
                     timer = fulltimer;
 
-                    foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[1], 10).FlattenAsync())
-                    {
-                        if (sender.Id != Context.Client.CurrentUser.Id)
-                            await helpMessage.RemoveReactionAsync(digits[1], sender);
-                    }
+                    await RemoveAllButOneEmote(digits, helpMessage, 1);
 
                     await helpMessage.AddReactionAsync(digits[6]);
                     await helpMessage.AddReactionAsync(digits[7]);
+                    await helpMessage.AddReactionAsync(back);
+                    break;
                 }
 
 
                 //FUN
-                else if (digitCounts[2] > 1)
+                else if (digitCounts[2] > 1 || looping == 2)
                 {
                     looping = 2;
 
@@ -107,16 +124,13 @@ namespace DiscordDestrucoBot.Modules
 
                     timer = fulltimer;
 
-                    foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[2], 10).FlattenAsync())
-                    {
-                        if (sender.Id != Context.Client.CurrentUser.Id)
-                            await helpMessage.RemoveReactionAsync(digits[2], sender);
-                    }
-
+                    await RemoveAllButOneEmote(digits, helpMessage, 2);
+                    await helpMessage.AddReactionAsync(back);
+                    break;
                 }
 
                 //MISC
-                else if (digitCounts[3] > 1)
+                else if (digitCounts[3] > 1 || looping == 3)
                 {
                     looping = 3;
 
@@ -133,15 +147,13 @@ namespace DiscordDestrucoBot.Modules
 
                     timer = fulltimer;
 
-                    foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[3], 10).FlattenAsync())
-                    {
-                        if (sender.Id != Context.Client.CurrentUser.Id)
-                            await helpMessage.RemoveReactionAsync(digits[3], sender);
-                    }
+                    await RemoveAllButOneEmote(digits, helpMessage, 3);
+                    await helpMessage.AddReactionAsync(back);
+                    break;
                 }
 
                 //ADMIN
-                else if (digitCounts[4] > 1)
+                else if (digitCounts[4] > 1 || looping == 4)
                 {
                     looping = 4;
 
@@ -159,26 +171,18 @@ namespace DiscordDestrucoBot.Modules
 
                     timer = fulltimer;
 
-                    foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[4], 10).FlattenAsync())
-                    {
-                        if (sender.Id != Context.Client.CurrentUser.Id)
-                            await helpMessage.RemoveReactionAsync(digits[4], sender);
-                    }
+                    await RemoveAllButOneEmote(digits, helpMessage, 4);
 
                     await helpMessage.AddReactionAsync(digits[6]);
+                    await helpMessage.AddReactionAsync(back);
+                    break;
                 }
-
-
-
-
-
 
 
 
                 if (timer <= 0)
                 {
                     looping = -1;
-
                     break;
                 }
 
@@ -188,15 +192,14 @@ namespace DiscordDestrucoBot.Modules
             }
 
 
-
-
+        End:
             while (true)
             {
 
                 await helpMessage.UpdateAsync();
                 for (int i = 1; i < helpMessage.Reactions.Count; i++)
                     digitCounts[i] = helpMessage.Reactions.GetValueOrDefault(digits[i]).ReactionCount;
-                
+
                 #region INFO
                 //INFO
                 if (looping == 1)
@@ -211,6 +214,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}serverinfo", "This will give info about the server/guild you are currently in.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 1);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[2] > 1)
@@ -220,6 +225,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}userinfo <user>", "This will give info about the user you specify.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 2);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[3] > 1)
@@ -229,6 +236,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}roleinfo <role>", "This will give info about the role you specify.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 3);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[4] > 1)
@@ -238,6 +247,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}channelinfo <role>", "Will give info about the channel you specify.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 4);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[5] > 1)
@@ -247,6 +258,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}membercount", "This shows the amount of members and the amount of bots and humans and the amount of users online.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 5);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[6] > 1)
@@ -256,6 +269,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}userperms <user>", "This will show all the available permission a user has in the channel its used in");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 6);
+                        timer = fulltimer;
                         break;
                     }
                     else if (digitCounts[7] > 1)
@@ -265,11 +280,10 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}Help", "**Help Me!**");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 7);
+                        timer = fulltimer;
                         break;
                     }
-
-
-
                 }
                 #endregion
 
@@ -287,6 +301,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}dog||{prefix}cat", "This takes a random picture off who knows where of either a dog or cat and sends it here.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 1);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[2] > 1)
@@ -296,6 +312,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}birb", "This command sends memes of ~~birds~~ **birbs**.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 2);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[3] > 1)
@@ -306,6 +324,8 @@ namespace DiscordDestrucoBot.Modules
                             $"If you input two numbers, it will get a number between them both `{prefix}randomnumber 50 100` this will return a number between 50 and 100.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 3);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[4] > 1)
@@ -315,6 +335,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}choose", $"This will choose a value you give it, for example if you give it 10 43 and 71 `{prefix}choose 10 43 71` it will randomly pick one of those 3 values.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 4);
+                        timer = fulltimer;
                         break;
                     }
                 }
@@ -334,6 +356,8 @@ namespace DiscordDestrucoBot.Modules
                             "or it can rename every user that has a specified role");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 1);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[2] > 1)
@@ -343,6 +367,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}say", $" Did someone {prefix}say Thunderfury, Blessed Blade of the Windseeker? ");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 2);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[3] > 1)
@@ -355,6 +381,8 @@ namespace DiscordDestrucoBot.Modules
                             $"3 arguments would be the color the title and the text, all this creates a embed which the bot says");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 3);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[4] > 1)
@@ -364,6 +392,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}ping||{prefix}pong", "The bot is not happy with what you serve, so it returns it right away");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 4);
+                        timer = fulltimer;
                         break;
                     }
 
@@ -376,13 +406,6 @@ namespace DiscordDestrucoBot.Modules
                 else if (looping == 4)
                 {
                     prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
-                    /*builder.WithTitle("Help-Admin").WithColor(Color.Red)
-                .AddField("Kick-1", $"`{prefix}kick <user> (reason)`")
-                .AddField("Ban-2", $"`{prefix}ban <user> (reason)`")
-                .AddField("Purge-3", $"`{prefix}purge <amount>`")
-                .AddField("Give and remove Roles-4", $"`{prefix}giverole <roletogive> <user>|<roletogive> <role> ||{prefix}removerole <roletoremove> <user>|<roletoremove> <role>`")
-                .AddField("ChangePrefix-5", $"`{prefix}changePrefix <newprefix>`")
-                .AddField("DefaultPrefix-6", $"`{prefix}defaultprefix`");*/
 
                     if (digitCounts[1] > 1)
                     {
@@ -391,6 +414,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}kick <user> (reason)", "For when your pal says @everyone");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 1);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[2] > 1)
@@ -400,6 +425,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}ban <user> (reason)", "For bringing down the ban hammer");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 2);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[3] > 1)
@@ -410,6 +437,8 @@ namespace DiscordDestrucoBot.Modules
                             "This command allows you to remove a specified amount of messages");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 3);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[4] > 1)
@@ -421,6 +450,8 @@ namespace DiscordDestrucoBot.Modules
                             "If you are a admin it also allows you to give or remove a role to every user in a specified role");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 4);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[5] > 1)
@@ -431,6 +462,8 @@ namespace DiscordDestrucoBot.Modules
                             $"Remember you can use {Context.Client.CurrentUser.Mention} as a prefix as well (mentioning the bot)");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 5);
+                        timer = fulltimer;
                         break;
                     }
                     if (digitCounts[6] > 1)
@@ -440,6 +473,8 @@ namespace DiscordDestrucoBot.Modules
                             .AddField($"{prefix}defaultprefix", $"Changes the prefix back to the default which is {Config.bot.defaultcmdPrefix}");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                        await RemoveAllButOneEmote(digits, helpMessage, 6);
+                        timer = fulltimer;
                         break;
                     }
 
@@ -449,7 +484,12 @@ namespace DiscordDestrucoBot.Modules
                 #endregion
 
 
-
+                if (helpMessage.Reactions.GetValueOrDefault(back).ReactionCount > 1)
+                {
+                    foreach (var sender in await helpMessage.GetReactionUsersAsync(back, 10).FlattenAsync())
+                        await helpMessage.RemoveReactionAsync(back, sender);
+                    goto Start;
+                }
 
 
 
@@ -462,16 +502,64 @@ namespace DiscordDestrucoBot.Modules
                 }
                 timer--;
 
-
                 await Task.Delay(500);
 
 
 
             }
 
+
+            while (true)
+            {
+                await helpMessage.UpdateAsync();
+                for (int i = 1; i < helpMessage.Reactions.Count; i++)
+                    digitCounts[i] = helpMessage.Reactions.GetValueOrDefault(digits[i]).ReactionCount;
+
+
+                for (int i = 0; i < digitCounts.Length; i++)
+                {
+                    if (digitCounts[i] > 1)
+                    {
+                        goto End;
+                    }
+                }
+                if (helpMessage.Reactions.GetValueOrDefault(back).ReactionCount > 1)
+                {
+                    foreach (var sender in await helpMessage.GetReactionUsersAsync(back, 10).FlattenAsync())
+                    {
+                        if (sender.Id != Context.Client.CurrentUser.Id)
+                            await helpMessage.RemoveReactionAsync(back, sender);
+                    }
+                    goto Middle;
+                }
+
+
+
+
+                if (timer <= 0)
+                {
+                    looping = -1;
+
+                    break;
+                }
+                timer--;
+
+                await Task.Delay(500);
+            }
+
+
             //end
             await helpMessage.RemoveAllReactionsAsync();
 
+        }
+
+        private async Task RemoveAllButOneEmote(Emoji[] digits, RestUserMessage helpMessage, int digit)
+        {
+            foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[digit], 10).FlattenAsync())
+            {
+                if (sender.Id != Context.Client.CurrentUser.Id)
+                    await helpMessage.RemoveReactionAsync(digits[digit], sender);
+            }
         }
     }
 }
