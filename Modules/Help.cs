@@ -244,7 +244,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Channel info").WithColor(Color.Purple)
-                            .AddField($"{prefix}channelinfo <role>", "Will give info about the channel you specify.");
+                            .AddField($"{prefix}channelinfo <channel>", "Will give info about the channel you specify.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
                         await RemoveAllButOneEmote(digits, helpMessage, 4);
@@ -298,7 +298,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Dog and Cat pictures").WithColor(new Color(66, 226, 244))
-                            .AddField($"{prefix}dog||{prefix}cat", "This takes a random picture off who knows where of either a dog or cat and sends it here.");
+                            .AddField($"{prefix}dog\n{prefix}cat", "This takes a random picture off who knows where of either a dog or cat and sends it here.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
                         await RemoveAllButOneEmote(digits, helpMessage, 1);
@@ -320,7 +320,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Random number").WithColor(new Color(66, 226, 244))
-                            .AddField($"{prefix}randomnumber", $"This can either send a number between 0 and whatever one number you pick `{prefix}randomnumber 10` this will return a number between 0 and 10.\n" +
+                            .AddField($"{prefix}randomnumber <MaxNumber> \n{prefix}randomnumber <MinNumber> <MaxNumber>", $"This can either send a number between 0 and whatever one number you pick `{prefix}randomnumber 10` this will return a number between 0 and 10.\n" +
                             $"If you input two numbers, it will get a number between them both `{prefix}randomnumber 50 100` this will return a number between 50 and 100.");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
@@ -352,7 +352,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Rename Users").WithColor(Color.Green)
-                            .AddField($"{prefix}rename users <user> <nickname> {prefix}rename <role> <nickname>", "This can either rename a single user \n" +
+                            .AddField($"{prefix}rename users <user> <nickname> \n{prefix}rename <role> <nickname>", "This can either rename a single user \n" +
                             "or it can rename every user that has a specified role");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
@@ -389,7 +389,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Ping&Pong").WithColor(Color.Green)
-                            .AddField($"{prefix}ping||{prefix}pong", "The bot is not happy with what you serve, so it returns it right away");
+                            .AddField($"{prefix}ping \n{prefix}pong", "The bot is not happy with what you serve, so it returns it right away");
 
                         await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
                         await RemoveAllButOneEmote(digits, helpMessage, 4);
@@ -445,7 +445,7 @@ namespace DiscordDestrucoBot.Modules
                     {
                         builder = new EmbedBuilder();
                         builder.WithTitle("Give and remove Roles").WithColor(Color.Red)
-                            .AddField($"{prefix}giverole <roletogive> <user>|<roletogive> <role> ||{prefix}removerole <roletoremove> <user>|<roletoremove> <role>",
+                            .AddField($"{prefix}giverole <roletogive> <user>|<roletogive> <role> ||\n{prefix}removerole <roletoremove> <user>|<roletoremove> <role>",
                             "This allows you to give or remove a role from a specified user \n" +
                             "If you are a admin it also allows you to give or remove a role to every user in a specified role");
 
