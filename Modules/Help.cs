@@ -30,7 +30,7 @@ namespace DiscordDestrucoBot.Modules
             EmbedBuilder builder;
 
             int[] digitCounts = new int[digits.Length];
-            const int fulltimer = 40;
+            const int fulltimer = 70;
 
 
         Start:

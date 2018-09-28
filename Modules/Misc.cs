@@ -99,6 +99,16 @@ namespace DiscordDestrucoBot.Modules
                 color = Color.Gold;
             else if (stringColor == "teal")
                 color = Color.Teal;
+            else if (stringColor == "black")
+                color = new Color(0, 0, 0);
+            else if (stringColor == "grey")
+                color = Color.LightGrey;
+            else if (stringColor == "yellow")
+                color = new Color(255, 255, 0);
+            else if (stringColor == "cyan")
+                color = new Color(0, 255, 255);
+            else if (stringColor == "white")
+                color = new Color(0, 0, 0);
             else if (stringColor == "darkgrey")
                 color = Color.DarkerGrey;
             else

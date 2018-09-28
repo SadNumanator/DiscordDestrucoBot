@@ -9,3 +9,8 @@ C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcore
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.0\DiscordDestrucoBot.pdb
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.0\DiscordDestrucoBot.dll
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.0\DiscordDestrucoBot.pdb
+C:\Users\me\Documents\Visual Studio 2017\Releases\DiscordDestrucoBot\netcoreapp2.0\DiscordDestrucoBot.deps.json
+C:\Users\me\Documents\Visual Studio 2017\Releases\DiscordDestrucoBot\netcoreapp2.0\DiscordDestrucoBot.runtimeconfig.json
+C:\Users\me\Documents\Visual Studio 2017\Releases\DiscordDestrucoBot\netcoreapp2.0\DiscordDestrucoBot.runtimeconfig.dev.json
+C:\Users\me\Documents\Visual Studio 2017\Releases\DiscordDestrucoBot\netcoreapp2.0\DiscordDestrucoBot.dll
+C:\Users\me\Documents\Visual Studio 2017\Releases\DiscordDestrucoBot\netcoreapp2.0\DiscordDestrucoBot.pdb

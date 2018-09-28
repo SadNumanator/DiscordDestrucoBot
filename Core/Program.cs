@@ -12,6 +12,12 @@ namespace DiscordDestrucoBot
     {
         static void Main(string[] args)
         {
+            if (Config.bot.defaultcmdPrefix == null)
+            {
+                Console.WriteLine("A default bot prefix is required");
+                Console.ReadLine();
+                return;
+            }
             Console.WriteLine("Default Bot Prefix: " + Config.bot.defaultcmdPrefix);
             new Program().RunBotAsync().GetAwaiter().GetResult();
         }
@@ -24,7 +30,12 @@ namespace DiscordDestrucoBot
          
         public async Task RunBotAsync()
         {
-            if (Config.bot.token == "" || Config.bot.token == null) return;
+            if (Config.bot.token == "" || Config.bot.token == null)
+            {
+                Console.WriteLine("A bot token is required");
+                Console.ReadLine();
+                return;
+            }
 
 
             _client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Verbose });

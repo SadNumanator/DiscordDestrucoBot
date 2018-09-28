@@ -1,0 +1,11 @@
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.1\DiscordDestrucoBot.deps.json
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.1\DiscordDestrucoBot.runtimeconfig.json
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.1\DiscordDestrucoBot.runtimeconfig.dev.json
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.1\DiscordDestrucoBot.dll
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Debug\netcoreapp2.1\DiscordDestrucoBot.pdb
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.csprojAssemblyReference.cache
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.csproj.CoreCompileInputs.cache
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.AssemblyInfoInputs.cache
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.AssemblyInfo.cs
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.dll
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Debug\netcoreapp2.1\DiscordDestrucoBot.pdb

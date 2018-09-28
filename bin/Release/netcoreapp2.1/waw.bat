@@ -1,0 +1,1 @@
+dotnet C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\bin\Release\netcoreapp2.1\DiscordDestrucoBot.dll
