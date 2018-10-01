@@ -94,7 +94,7 @@ namespace DiscordDestrucoBot
 
             var contex = new SocketCommandContext(_client, message);
 
-            if (message.HasStringPrefix(DataStorage.GetPrefixValue("Prefix" + contex.Guild.Id), ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
+            if (message.HasStringPrefix(DataStorage.GetPrefixValue(contex.Guild.Id.ToString()), ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
 
                 var result = await _commands.ExecuteAsync(contex, argPos, _services);

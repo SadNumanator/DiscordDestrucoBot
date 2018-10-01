@@ -57,6 +57,421 @@ namespace DiscordDestrucoBot.Modules
 
 
 
+        [Command("2048", RunMode = RunMode.Async)][RequireBotPermission(ChannelPermission.ManageMessages)]
+        public async Task Game2048Async(int _xvalue = 4,int _yvalue = 4)
+        {
+            if(_xvalue > 19 || _yvalue > 19)
+            {
+                await ReplyAsync("The x or y values can not go over 19");
+                    return;
+            }
+
+            int maxX = _xvalue;
+            int maxY = _yvalue;
+            int timer;
+            int maxtimer = 70;
+
+            RestUserMessage clientMessage;
+            StringBuilder stringMessage = new StringBuilder();
+
+            int[,] gameArray = new int[maxX, maxY];
+
+            for (int y = 0; y < maxY; y++)
+            {
+                for (int x = 0; x < maxX; x++)
+                {
+                    gameArray[x, y] = 0;
+                }
+            }
+            int fullamount;
+            PlaceRandom2048Value(maxX, maxY, gameArray);
+            Update2048String(maxX, maxY, stringMessage, gameArray, out fullamount);
+
+            
+
+            
+            clientMessage = await Context.Channel.SendMessageAsync($"Score : {fullamount}" + stringMessage.ToString());
+
+
+            //Emojis
+            Emoji leftarrow = new Emoji("\u2B05");
+            Emoji rightarrow = new Emoji("\u27A1");
+            Emoji downarrow = new Emoji("\u2B07");
+            Emoji uparrow = new Emoji("\u2B06");
+        
+            await clientMessage.UpdateAsync();
+
+            await clientMessage.AddReactionAsync(downarrow);
+            await clientMessage.AddReactionAsync(uparrow);
+            await clientMessage.AddReactionAsync(leftarrow);
+            await clientMessage.AddReactionAsync(rightarrow);
+
+            if (CheckForLoss2048(maxX, maxY, gameArray) == true)
+            {
+                await clientMessage.ModifyAsync(msg => msg.Content = stringMessage.ToString() + "**Game Over**\nYou Lose with a score of : " + fullamount + "\nand before you even had your first turn :(");
+                return;
+            }
+
+            try
+            {
+                timer = maxtimer;
+                while (true)
+                {
+                    await clientMessage.UpdateAsync();
+
+                    int delaytime = 500;
+
+                    if (clientMessage.Reactions.GetValueOrDefault(downarrow).ReactionCount > 1)
+                    {
+                        bool somethingMoved = false;
+                        for (int x = 0; x < maxX; x++)
+                        {
+                            for (int y = maxY - 1; y >= 0; y--)
+                            {
+                                if (gameArray[x, y] != 0)
+                                {
+                                    int ypoint = y;
+                                    while (ypoint + 1 < maxY)
+                                    {
+                                        if (gameArray[x, ypoint + 1] == gameArray[x, ypoint])
+                                        {
+                                            gameArray[x, ypoint + 1] += gameArray[x, ypoint];
+                                            gameArray[x, ypoint] = 0;
+                                            somethingMoved = true;
+                                            break;
+                                        }
+                                        else if (gameArray[x, ypoint + 1] == 0)
+                                        {
+                                            gameArray[x, ypoint + 1] = gameArray[x, ypoint];
+                                            gameArray[x, ypoint] = 0;
+                                            somethingMoved = true;
+                                            ypoint++;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        if (somethingMoved == false)
+                        {
+                            await RemoveAllButOneEmote(downarrow, clientMessage);
+                            continue;
+                        }
+
+                        PlaceRandom2048Value(maxX, maxY, gameArray);
+
+                        Update2048String(maxX, maxY, stringMessage, gameArray, out fullamount);
+
+                        await clientMessage.ModifyAsync(msg => msg.Content = $"Score : {fullamount}" + stringMessage.ToString());
+                        await RemoveAllButOneEmote(downarrow, clientMessage);
+                        if (CheckForLoss2048(maxX, maxY, gameArray) == true)
+                        {
+                            await clientMessage.ModifyAsync(msg => msg.Content = stringMessage.ToString() + "**Game Over**\nYou Lose with a score of : " + fullamount);
+                            break;
+                        }
+                        timer = maxtimer;
+                    }
+
+                    else if (clientMessage.Reactions.GetValueOrDefault(uparrow).ReactionCount > 1)
+                    {
+                        bool somethingMoved = false;
+                        for (int x = 0; x < maxX; x++)
+                        {
+                            for (int y = 0; y < maxY; y++)
+                            {
+                                if (gameArray[x, y] != 0)
+                                {
+                                    int ypoint = y;
+                                    while (ypoint - 1 >= 0)
+                                    {
+                                        if (gameArray[x, ypoint - 1] == gameArray[x, ypoint])
+                                        {
+                                            gameArray[x, ypoint - 1] += gameArray[x, ypoint];
+                                            gameArray[x, ypoint] = 0;
+                                            somethingMoved = true;
+                                            break;
+                                        }
+                                        else if (gameArray[x, ypoint - 1] == 0)
+                                        {
+                                            gameArray[x, ypoint - 1] = gameArray[x, ypoint];
+                                            gameArray[x, ypoint] = 0;
+                                            somethingMoved = true;
+                                            ypoint--;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        if (somethingMoved == false)
+                        {
+                            await RemoveAllButOneEmote(uparrow, clientMessage);
+                            continue;
+                        }
+
+
+                        PlaceRandom2048Value(maxX, maxY, gameArray);
+
+                        Update2048String(maxX, maxY, stringMessage, gameArray, out fullamount);
+
+                        await clientMessage.ModifyAsync(msg => msg.Content = $"Score : {fullamount}" + stringMessage.ToString());
+                        await RemoveAllButOneEmote(uparrow, clientMessage);
+                        if (CheckForLoss2048(maxX, maxY, gameArray) == true)
+                        {
+                            await clientMessage.ModifyAsync(msg => msg.Content = stringMessage.ToString() + "**Game Over**\nYou Lose with a score of : " + fullamount);
+                            break;
+                        }
+                        timer = maxtimer;
+                    }
+
+                    else if (clientMessage.Reactions.GetValueOrDefault(leftarrow).ReactionCount > 1)
+                    {
+                        bool somethingMoved = false;
+                        for (int y = 0; y < maxY; y++)
+                        {
+                            for (int x = 0; x < maxX; x++)
+                            {
+                                if (gameArray[x, y] != 0)
+                                {
+                                    int xpoint = x;
+                                    while (xpoint - 1 >= 0)
+                                    {
+                                        if (gameArray[xpoint - 1, y] == gameArray[xpoint, y])
+                                        {
+                                            gameArray[xpoint - 1, y] += gameArray[xpoint, y];
+                                            gameArray[xpoint, y] = 0;
+                                            somethingMoved = true;
+                                            break;
+                                        }
+                                        else if (gameArray[xpoint - 1, y] == 0)
+                                        {
+                                            gameArray[xpoint - 1, y] = gameArray[xpoint, y];
+                                            gameArray[xpoint, y] = 0;
+                                            somethingMoved = true;
+                                            xpoint--;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (somethingMoved == false)
+                        {
+                            await RemoveAllButOneEmote(leftarrow, clientMessage);
+                            continue;
+                        }
+
+                        PlaceRandom2048Value(maxX, maxY, gameArray);
+
+                        Update2048String(maxX, maxY, stringMessage, gameArray, out fullamount);
+
+                        await clientMessage.ModifyAsync(msg => msg.Content = $"Score : {fullamount}" + stringMessage.ToString());
+                        await RemoveAllButOneEmote(leftarrow, clientMessage);
+                        if (CheckForLoss2048(maxX, maxY, gameArray) == true)
+                        {
+                            await clientMessage.ModifyAsync(msg => msg.Content = stringMessage.ToString() + "**Game Over**\nYou Lose with a score of : " + fullamount);
+                            break;
+                        }
+                        timer = maxtimer;
+                    }
+
+                    else if (clientMessage.Reactions.GetValueOrDefault(rightarrow).ReactionCount > 1)
+                    {
+                        bool somethingMoved = false;
+                        for (int y = 0; y < maxY; y++)
+                        {
+                            for (int x = maxX - 1; x >= 0; x--)
+                            {
+                                if (gameArray[x, y] != 0)
+                                {
+                                    int xpoint = x;
+                                    while (xpoint + 1 < maxX)
+                                    {
+                                        if (gameArray[xpoint + 1, y] == gameArray[xpoint, y])
+                                        {
+                                            gameArray[xpoint + 1, y] += gameArray[xpoint, y];
+                                            gameArray[xpoint, y] = 0;
+                                            somethingMoved = true;
+                                            break;
+                                        }
+                                        else if (gameArray[xpoint + 1, y] == 0)
+                                        {
+                                            gameArray[xpoint + 1, y] = gameArray[xpoint, y];
+                                            gameArray[xpoint, y] = 0;
+                                            somethingMoved = true;
+                                            xpoint++;
+                                        }
+                                        else
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (somethingMoved == false)
+                        {
+                            await RemoveAllButOneEmote(rightarrow, clientMessage);
+                            continue;
+                        }
+
+                        PlaceRandom2048Value(maxX, maxY, gameArray);
+
+                        Update2048String(maxX, maxY, stringMessage, gameArray, out fullamount);
+
+                        await clientMessage.ModifyAsync(msg => msg.Content = $"Score : {fullamount}" + stringMessage.ToString());
+                        await RemoveAllButOneEmote(rightarrow, clientMessage);
+                        if (CheckForLoss2048(maxX, maxY, gameArray) == true)
+                        {
+                            await clientMessage.ModifyAsync(msg => msg.Content = stringMessage.ToString() + "**Game Over**\nYou Lose with a score of : " + fullamount);
+                            break;
+                        }
+                        timer = maxtimer;
+                    }
+
+
+                    if (timer <= 0)
+                    {
+                        break;
+                    }
+                    else if (timer - maxtimer / 4 <= 0)
+                    {
+                        delaytime *= 5;
+                    }
+                    else if (timer - maxtimer / 2 <= 0)
+                    {
+                        delaytime *= 2;
+                    }
+                    timer--;
+                    await Task.Delay(delaytime);
+                }
+            }
+            catch (Exception ex)
+            {
+                await ReplyAsync(ex.Message + "\nshow numan this");
+            }
+            await clientMessage.RemoveAllReactionsAsync();
+        }
+
+        private static bool CheckForLoss2048(int maxX, int maxY, int[,] gameArray)
+        {
+            for (int x = 0; x < maxX; x++)
+            {
+                for (int y = 0; y < maxY; y++)
+                {
+                    if (gameArray[x, y] != 0)
+                    {
+                        if (y + 1 < maxY)
+                        {
+                            if (gameArray[x, y + 1] == gameArray[x, y])
+                            {
+                                return false;
+                            }
+                            else if (gameArray[x, y + 1] == 0)
+                            {
+                                return false;
+                            }
+                        }
+                        if (y - 1 >= 0)
+                        {
+                            if (gameArray[x, y - 1] == gameArray[x, y])
+                            {
+                                return false;
+                            }
+                            else if (gameArray[x, y - 1] == 0)
+                            {
+                                return false;
+                            }
+                        }
+                        if (x + 1 < maxX)
+                        {
+                            if (gameArray[x + 1, y] == gameArray[x, y])
+                            {
+                                return false;
+                            }
+                            else if (gameArray[x + 1, y] == 0)
+                            {
+                                return false;
+                            }
+                        }
+                        if (x - 1 >= 0)
+                        {
+                            if (gameArray[x - 1, y] == gameArray[x, y])
+                            {
+                                return false;
+                            }
+                            else if (gameArray[x - 1, y] == 0)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static int[,] PlaceRandom2048Value(int maxX, int maxY, int[,] gameArray)
+        {
+            int count = 0;
+            while (count < Math.Ceiling(((maxX * maxY)/ 16d)))
+            {
+                int rndX;
+                int rndY;
+                do
+                {
+                    rndX = Program.rnd.Next(maxX);
+                    rndY = Program.rnd.Next(maxY);
+                }
+                while (gameArray[rndX, rndY] != 0);
+                int rndValue;
+                if (Program.rnd.Next(2) == 0)
+                    rndValue = 2;
+                else
+                    rndValue = 4;
+                gameArray[rndX, rndY] = rndValue;
+                count++;
+            }
+            return gameArray;
+        }
+
+        private static StringBuilder Update2048String(int maxX, int maxY, StringBuilder stringMessage, int[,] gameArray, out int fullamount)
+        {
+            fullamount = Get2048FullAmount(maxX, maxY, gameArray);
+            stringMessage.Clear();
+            string color = "";
+            if (fullamount >= 1000)
+            {
+                string[] colors = (new string[] { "swift\n.", "fix\n.", "ini\n[" });
+                color = colors[Program.rnd.Next(0, colors.Length)];
+            }
+                stringMessage.AppendLine("```" + color);
+            for (int y = 0; y < maxY; y++)
+            {
+                for (int x = 0; x < maxX; x++)
+                {
+                    stringMessage.Append("|" + gameArray[x, y].ToString().PadRight(4));
+                }
+                stringMessage.AppendLine();
+            }
+            stringMessage.Append("```");
+            return stringMessage;
+        }
+        private static int Get2048FullAmount(int maxX, int maxY, int[,] gameArray)
+        {
+            int fullamount = 0;
+            for (int y = 0; y < maxY; y++)
+            {
+                for (int x = 0; x < maxX; x++)
+                {
+                    fullamount += gameArray[x, y];
+                }
+            }
+            return fullamount;
+        }
 
         #region RandomPicking
         [Command("randomnumber")]
@@ -193,6 +608,16 @@ namespace DiscordDestrucoBot.Modules
                 //string checkPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +@"\1.png";
                 //File.WriteAllBytes(checkPath, pic);
                 return pic;
+            }
+        }
+
+
+        private async Task RemoveAllButOneEmote(Emoji emote, RestUserMessage message)
+        {
+            foreach (var sender in await message.GetReactionUsersAsync(emote, 20).FlattenAsync())
+            {
+                if (sender.Id != Context.Client.CurrentUser.Id)
+                    await message.RemoveReactionAsync(emote, sender);
             }
         }
     }

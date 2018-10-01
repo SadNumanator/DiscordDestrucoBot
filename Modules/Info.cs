@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DiscordDestrucoBot.Modules
 {
@@ -22,10 +23,10 @@ namespace DiscordDestrucoBot.Modules
                 _nickname = $"with the nickname of { Context.Guild.Owner.Nickname}";
 
             //Puts all the roles into one string
-            string _roles = string.Join(", ", Context.Guild.Roles);
+            string _roles = string.Join(", ", Context.Guild.Roles.OrderByDescending(role => role.Position));
 
             if (_roles.Length > 11)//If there are more roles then just @everyone
-                _roles = _roles.Replace("@everyone, ", "");
+                _roles = _roles.Replace(", @everyone", "");
             else
                 _roles = _roles.Replace("@everyone", "None");//Otherwise everyone equals none
 
@@ -62,14 +63,13 @@ namespace DiscordDestrucoBot.Modules
             string _permissions = string.Join(", ", roleArg.Permissions.ToList());
 
             EmbedBuilder builder = new EmbedBuilder();//Make the embed builder that makes the embed
-
             builder.WithTitle($"Info About {roleArg.Name}")
                 .WithColor(roleArg.Color)
                 .AddField($"**Permissions**", $"```{_permissions}```")
                 .AddField($"**Position**", $"```{roleArg.Position}```", true)
                 .AddField($"**Mentionable**", $"```{_mentionable}```", true)
-                .AddField($"**Creation Date**", $"```{roleArg.CreatedAt}```", true);
-
+                .AddField($"**Creation Date**", $"```{roleArg.CreatedAt}```", true)
+                .AddField($"**Member Count**", $"```{roleArg.Members.Count()}```", true);
             await ReplyAsync("", false, builder.Build());//This here makes the bot print the embed
         }
 
@@ -89,7 +89,7 @@ namespace DiscordDestrucoBot.Modules
                 else
                     _humancount++;
 
-                if (member.Status == UserStatus.Online && member.IsBot == false)
+                if (member.Status != UserStatus.Offline && member.Status != UserStatus.AFK && member.IsBot == false)
                     _onlinecount++;
             }
 
@@ -105,7 +105,7 @@ namespace DiscordDestrucoBot.Modules
 
 
         [Command("perms")]
-        [Alias("user perms", "userperms" ,"userinfo perms", "whois perms")]
+        [Alias("user perms", "permissions" ,"userinfo perms", "whois perms")]
         public async Task UserPermissionsAsync([Remainder]SocketGuildUser userArg)
         {
 
@@ -161,7 +161,7 @@ namespace DiscordDestrucoBot.Modules
             .AddField($"**Account Creation Date:**", $"```{userArg.CreatedAt}```", true)
             .AddField($"**Status:**", $"```{userArg.Status}```", true)
             .AddField($"**Roles:**", $"```{_roles}```")
-            .AddField($"**Permissions:**", $"```Please use {DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id)}userinfo perms @user```", true);
+            .AddField($"**Permissions:**", $"```Please use {DataStorage.GetPrefixValue(Context.Guild.Id.ToString())}perms @user```", true);
 
             await ReplyAsync("", false, builder.Build());//This here makes the bot print the embed
         }

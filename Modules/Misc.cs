@@ -132,11 +132,11 @@ namespace DiscordDestrucoBot.Modules
         /*
         [Command("emoji")]
         [Alias("emojitopicture", "picture", "emote")]
-        public async Task EmojiToPictureAsync(GuildEmote _emote)
+        public async Task EmojiToPictureAsync(Emote _emote)
         {
             EmbedBuilder builder = new EmbedBuilder();
-            builder.WithTitle($"\\:{_emote.Name}:");
-            await ReplyAsync(null ,false, builder.Build());
+            builder.WithTitle($":{_emote.Name}:");
+            await ReplyAsync("",false, builder.Build());
         }
         */
 

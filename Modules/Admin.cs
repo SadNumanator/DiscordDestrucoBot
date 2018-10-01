@@ -60,10 +60,10 @@ namespace DiscordDestrucoBot.Modules
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ChangeGuildPrefixAsync(string prefix)
         {
-            string previousprefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+            string previousprefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
             DataStorage.AddPair("Prefix" + Context.Guild.Id, prefix);
-            await ReplyAsync($"The previous prefix was `{previousprefix}`. \nThe new prefix is now `{DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id)}` it was set by {Context.User.Mention}. \nRemember you can use {Context.Client.CurrentUser.Mention} as a prefix.");
+            await ReplyAsync($"The previous prefix was `{previousprefix}`. \nThe new prefix is now `{DataStorage.GetPrefixValue(Context.Guild.Id.ToString())}` it was set by {Context.User.Mention}. \nRemember you can use {Context.Client.CurrentUser.Mention} as a prefix.");
         }
 
         [Command("removeprefix")]
@@ -76,7 +76,7 @@ namespace DiscordDestrucoBot.Modules
                 await ReplyAsync("The prefix is already the default prefix."); return;
             }
 
-            string previousprefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+            string previousprefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
             if (DataStorage.KeyExists("Prefix" + Context.Guild.Id))
                 DataStorage.RemoveKey("Prefix" + Context.Guild.Id);

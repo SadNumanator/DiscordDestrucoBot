@@ -15,6 +15,7 @@ namespace DiscordDestrucoBot.Modules
     {
 
         [Command("Help", RunMode = RunMode.Async)]
+        [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task HelpCommandAsync()
         {
 
@@ -37,7 +38,7 @@ namespace DiscordDestrucoBot.Modules
 
             int looping = 0;
 
-            string prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+            string prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
             builder = new EmbedBuilder();
             builder.WithTitle("Help-" + looping).WithColor(Color.Blue)
@@ -81,7 +82,7 @@ namespace DiscordDestrucoBot.Modules
                 {
                     looping = 1;
 
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
                     builder = new EmbedBuilder();
                     builder.WithTitle("Help-Info").WithColor(Color.Purple)
                 .AddField("Server info-1", $"`{prefix}serverinfo`")
@@ -111,7 +112,7 @@ namespace DiscordDestrucoBot.Modules
                 {
                     looping = 2;
 
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
                     builder = new EmbedBuilder();
                     builder.WithTitle("Help-Fun").WithColor(new Color(66, 226, 244))
                 .AddField("Dog or Cat pictures-1", $"`{prefix}dog|{prefix}cat`")
@@ -134,7 +135,7 @@ namespace DiscordDestrucoBot.Modules
                 {
                     looping = 3;
 
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
                     builder = new EmbedBuilder();
                     builder.WithTitle("Help-Misc").WithColor(Color.Green)
                 .AddField("Rename Users-1", $"`{prefix}rename <user> <nickname>{prefix}rename <role> <nickname>`")
@@ -157,7 +158,7 @@ namespace DiscordDestrucoBot.Modules
                 {
                     looping = 4;
 
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
                     builder = new EmbedBuilder();
                     builder.WithTitle("Help-Admin").WithColor(Color.Red)
                 .AddField("Kick-1", $"`{prefix}kick <user> (reason)`")
@@ -204,7 +205,7 @@ namespace DiscordDestrucoBot.Modules
                 //INFO
                 if (looping == 1)
                 {
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
 
                     if (digitCounts[1] > 1)
@@ -292,7 +293,7 @@ namespace DiscordDestrucoBot.Modules
                 //FUN
                 else if (looping == 2)
                 {
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
                     if (digitCounts[1] > 1)
                     {
@@ -346,7 +347,7 @@ namespace DiscordDestrucoBot.Modules
                 //MISC
                 else if (looping == 3)
                 {
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
                     if (digitCounts[1] > 1)
                     {
@@ -405,7 +406,7 @@ namespace DiscordDestrucoBot.Modules
                 //ADMIN
                 else if (looping == 4)
                 {
-                    prefix = DataStorage.GetPrefixValue("Prefix" + Context.Guild.Id);
+                    prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
 
                     if (digitCounts[1] > 1)
                     {
@@ -555,7 +556,7 @@ namespace DiscordDestrucoBot.Modules
 
         private async Task RemoveAllButOneEmote(Emoji[] digits, RestUserMessage helpMessage, int digit)
         {
-            foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[digit], 10).FlattenAsync())
+            foreach (var sender in await helpMessage.GetReactionUsersAsync(digits[digit], 20).FlattenAsync())
             {
                 if (sender.Id != Context.Client.CurrentUser.Id)
                     await helpMessage.RemoveReactionAsync(digits[digit], sender);

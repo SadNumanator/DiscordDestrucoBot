@@ -25,9 +25,9 @@ namespace DiscordDestrucoBot
             SaveData();
         }
 
-        public static string GetPrefixValue(string key)
+        public static string GetPrefixValue(string guildid)
         {
-            return pairs.GetValueOrDefault(key, Config.bot.defaultcmdPrefix);
+            return pairs.GetValueOrDefault("Prefix" + guildid, Config.bot.defaultcmdPrefix);
         }
 
         public static string GetKeyValue(string key)
