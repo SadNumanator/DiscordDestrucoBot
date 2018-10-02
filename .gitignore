@@ -28,3 +28,9 @@ $RECYCLE.BIN/
 *.json
 obj/Debug/netcoreapp2.0/DiscordDestrucoBot.AssemblyInfo.cs
 *.props
+bin/Debug/netcoreapp2.1/opus.dll.checksums
+*.wav
+
+*.ogg
+*.checksums
+bin/Debug/netcoreapp2.1/ffmpeg.exe

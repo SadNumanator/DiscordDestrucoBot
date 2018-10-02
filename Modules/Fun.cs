@@ -55,7 +55,7 @@ namespace DiscordDestrucoBot.Modules
 
         #endregion
 
-
+        #region 2048Game
 
         [Command("2048", RunMode = RunMode.Async)][RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task Game2048Async(int _xvalue = 4,int _yvalue = 4)
@@ -473,7 +473,27 @@ namespace DiscordDestrucoBot.Modules
             return fullamount;
         }
 
+        #endregion
+
         #region RandomPicking
+
+        [Command("coinflip")]
+        [Alias("flipcoin", "coin flip", "flip coin")]
+        public async Task CoinFlip()
+        {
+            int coinflipnum = Program.rnd.Next(1001);
+
+            if (coinflipnum > 500)
+                await ReplyAsync("**Tails**");
+            else if (coinflipnum < 500)
+                await ReplyAsync("**Heads**");
+            else
+                await ReplyAsync("**Edge**");
+
+
+        }
+
+
         [Command("randomnumber")]
         public async Task RandomNumberAsync(string value1 = null)//This is a optional paramater that you type after !ping awawawawa
         {//Remainder puts all the things into one string

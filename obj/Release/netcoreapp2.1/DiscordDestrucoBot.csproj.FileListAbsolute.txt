@@ -8,3 +8,4 @@ C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Release\netco
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Release\netcoreapp2.1\DiscordDestrucoBot.AssemblyInfo.cs
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Release\netcoreapp2.1\DiscordDestrucoBot.dll
 C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Release\netcoreapp2.1\DiscordDestrucoBot.pdb
+C:\Users\me\source\repos\DiscordDestrucoBot\DiscordDestrucoBot\obj\Release\netcoreapp2.1\DiscordDestrucoBot.csprojAssemblyReference.cache

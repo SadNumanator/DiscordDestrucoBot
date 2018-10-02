@@ -22,10 +22,11 @@ namespace DiscordDestrucoBot
             new Program().RunBotAsync().GetAwaiter().GetResult();
         }
 
-        public static Random rnd = new Random(DateTime.Now.Second);
+        public static Random rnd = new Random();
 
         private DiscordSocketClient _client;
         private CommandService _commands;
+        private AudioService _audioservice;
         private IServiceProvider _services;
          
         public async Task RunBotAsync()
@@ -40,10 +41,11 @@ namespace DiscordDestrucoBot
 
             _client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Verbose });
             _commands = new CommandService();
+            _audioservice = new AudioService();
 
             _services = new ServiceCollection()
                 .AddSingleton(_client)
-                .AddSingleton(_commands)
+                .AddSingleton(_commands).AddSingleton(_audioservice)
                 .BuildServiceProvider();
 
             //Event subscriptions
@@ -55,6 +57,8 @@ namespace DiscordDestrucoBot
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
 
             await _client.StartAsync();
+
+            await _client.SetGameAsync("with your secret info");
 
             await Task.Delay(-1);
 
