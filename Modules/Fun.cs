@@ -617,10 +617,13 @@ namespace DiscordDestrucoBot.Modules
             if (choice == "r")
                 choice = "rock";
 
-            if (choice == "gun" || choice == "shoot")
+            if (choice == "gun" || choice == "shoot"|| choice == "pew")
             {
-                await ReplyAsync("**Dead**");
-                return;
+                await ReplyAsync("**Dead**"); return;
+            }
+            if (choice == "dynamite" || choice == "rpg")
+            {
+                await ReplyAsync("**Boom**"); return;
             }
 
             if (choice == "rock")
