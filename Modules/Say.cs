@@ -1,8 +1,6 @@
-﻿using Discord;
+﻿using System.Text.RegularExpressions;
+using Discord;
 using Discord.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordDestrucoBot.Modules
@@ -11,7 +9,7 @@ namespace DiscordDestrucoBot.Modules
     public class Say : ModuleBase<SocketCommandContext>
     {
 
-        [Command("several"), RequireUserPermission(GuildPermission.Administrator)]
+        [Command("several", RunMode = RunMode.Async), RequireUserPermission(GuildPermission.Administrator)]
         [Alias("multible", "few")]
         public async Task SayMultible(int numberof, [Remainder] string argumentname)
         {
@@ -21,15 +19,8 @@ namespace DiscordDestrucoBot.Modules
                 return;
             }
 
-            argumentname = argumentname.Replace("u", "us");
-            argumentname = argumentname.Replace("m", "ms");
-            argumentname = argumentname.Replace("s", "ss");
-            argumentname = argumentname.Replace("a", "as");
-            argumentname = argumentname.Replace("e", "es");
-
             for (int i = 0; i< numberof; i++)
-                await ReplyAsync('\u200B' + argumentname);
-            //the '\u200B' will prevent other bots from picking up on the message
+                await SayAsync(argumentname);
         }
 
         [Command, RequireUserPermission(ChannelPermission.MentionEveryone)]
@@ -49,7 +40,7 @@ namespace DiscordDestrucoBot.Modules
             argumentname = argumentname.Replace("@everyone", "everyone");
             argumentname = argumentname.Replace("@here", "here");
 
-            await ReplyAsync('\u200B' + argumentname);
+            await SayAsync(argumentname);
         }
         
     }

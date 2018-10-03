@@ -606,6 +606,71 @@ namespace DiscordDestrucoBot.Modules
             result = result | (long)rand.Next((Int32)min, (Int32)max + 1);
             return result;
         }
+
+        [Command("rps")]
+        [Alias("rockpaperscissors")]
+        public async Task RockPaperScissorsAsync(string choice)
+        {
+            int compChoice = Program.rnd.Next(3);
+            choice = choice.ToLowerInvariant();
+
+            if (choice == "r")
+                choice = "rock";
+
+            if (choice == "gun" || choice == "shoot")
+            {
+                await ReplyAsync("**Dead**");
+                return;
+            }
+
+            if (choice == "rock")
+            {
+                if (compChoice == 1)
+                {
+                    await ReplyAsync($"The computer threw paper and you threw {choice}, **you lose!**");
+                    return;
+                }
+                if (compChoice == 2)
+                {
+                    await ReplyAsync($"The computer threw scissors and you threw {choice}, **you win!**");
+                    return;
+                }
+                await ReplyAsync($"The computer threw rock and you threw {choice}, **you tie!**");
+                return;
+            }
+            else if (choice == "paper")
+            {
+                if (compChoice == 0)
+                {
+                    await ReplyAsync($"The computer threw rock and you threw {choice}, **you win!**");
+                    return;
+                }
+                if (compChoice == 2)
+                {
+                    await ReplyAsync($"The computer threw scissors and you threw {choice}, **you lose!**");
+                    return;
+                }
+                await ReplyAsync($"The computer threw paper and you threw {choice}, **you tie!**");
+                return;
+            }
+            else
+            {
+                if(compChoice == 0)
+                {
+                    await ReplyAsync($"The computer threw rock and you threw {choice}, **you lose!**");
+                    return;
+                }
+                if(compChoice == 1)
+                {
+                    await ReplyAsync($"The computer threw paper and you threw {choice}, **you win!**");
+                    return;
+                }
+                await ReplyAsync($"The computer threw scissors and you threw {choice}, **you tie!**");
+                return;
+            }
+
+
+        }
         #endregion
 
 
