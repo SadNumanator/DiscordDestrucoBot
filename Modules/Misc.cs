@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DiscordDestrucoBot.Modules
 {
@@ -63,17 +64,17 @@ namespace DiscordDestrucoBot.Modules
                 await ReplyAsync("Nickname must be equal to or under 32 characters"); return;
             }
 
-            int _amountchanged = 0;
+            int amountchanged = 0;
             var botuser = Context.Guild.GetUser(Context.Client.CurrentUser.Id);
             foreach (SocketGuildUser userArg in roleArg.Members) {
                 if (userArg.Hierarchy >= botuser.Hierarchy)
                     continue;
 
                 await userArg.ModifyAsync(x => { x.Nickname = name; });
-                _amountchanged++;
+                amountchanged++;
             }
 
-            await ReplyAsync($"{_amountchanged} users have had their nicknames changed to {name} by {Context.User.Mention}");
+            await ReplyAsync($"{amountchanged} users have had their nicknames changed to {name} by {Context.User.Mention}");
         }
 
 
@@ -83,39 +84,55 @@ namespace DiscordDestrucoBot.Modules
             string stringColor = argStringColor.ToLowerInvariant();
             Color color;
 
-            if (stringColor == "red")
-                color = Color.Red;
-            else if (stringColor == "blue")
-                color = Color.Blue;
-            else if (stringColor == "green")
-                color = Color.Green;
-            else if (stringColor == "orange")
-                color = Color.Orange;
-            else if (stringColor == "purple")
-                color = Color.Purple;
-            else if (stringColor == "magenta")
-                color = Color.Magenta;
-            else if (stringColor == "gold")
-                color = Color.Gold;
-            else if (stringColor == "teal")
-                color = Color.Teal;
-            else if (stringColor == "black")
-                color = new Color(0, 0, 0);
-            else if (stringColor == "grey")
-                color = Color.LightGrey;
-            else if (stringColor == "yellow")
-                color = new Color(255, 255, 0);
-            else if (stringColor == "cyan")
-                color = new Color(0, 255, 255);
-            else if (stringColor == "white")
-                color = new Color(0, 0, 0);
-            else if (stringColor == "darkgrey")
-                color = Color.DarkerGrey;
-            else
+            switch (stringColor)
             {
-                color = Color.LighterGrey;
-                _text = $"{_title} {_text}";
-                _title = argStringColor;
+                case "red":
+                    color = Color.Red;
+                    break;
+                case "blue":
+                    color = Color.Blue;
+                    break;
+                case "green":
+                    color = Color.Green;
+                    break;
+                case "orange":
+                    color = Color.Orange;
+                    break;
+                case "purple":
+                    color = Color.Purple;
+                    break;
+                case "magenta":
+                    color = Color.Magenta;
+                    break;
+                case "gold":
+                    color = Color.Gold;
+                    break;
+                case "teal":
+                    color = Color.Teal;
+                    break;
+                case "black":
+                    color = new Color(0, 0, 0);
+                    break;
+                case "grey":
+                    color = Color.LightGrey;
+                    break;
+                case "yellow":
+                    color = new Color(255, 255, 0);
+                    break;
+                case "cyan":
+                    color = new Color(0, 255, 255);
+                    break;
+                case "white":
+                    color = new Color(0, 0, 0);
+                    break;
+                case "darkgrey":
+                    color = Color.DarkerGrey;
+                    break;
+                default:
+                    color = Color.LighterGrey;
+                    _text = $"{_title} {_text}";
+                    _title = argStringColor;
+                    break;
             }
 
             EmbedBuilder builder = new EmbedBuilder();//Make the embed builder that makes the embed
