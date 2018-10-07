@@ -9,10 +9,78 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.Linq;
+
 namespace DiscordDestrucoBot.Modules
 {
     public class Help : ModuleBase<SocketCommandContext>
     {
+
+
+        [Command("newhelp", RunMode = RunMode.Async)]
+        [RequireBotPermission(ChannelPermission.ManageMessages)]
+        public async Task HelpCommandAsync([Remainder]string menu)
+        {
+            //RestUserMessage helpMessage = null;
+            //EmbedBuilder builder;
+
+            string prefix = DataStorage.GetPrefixValue(Context.Guild.Id.ToString());
+
+            var menusystem = new MenuSystem();
+
+            //Base menus
+            menusystem.AddMenu("Help", null);
+            menusystem.AddMenu("Help-Admin", "Help", Color.Red);
+            menusystem.AddMenu("Help-Misc", "Help", Color.Green);
+            menusystem.AddMenu("Help-Fun", "Help", new Color(66, 226, 244));
+            menusystem.AddMenu("Help-Info", "Help", Color.Purple);
+
+            //Starting help menu
+            menusystem.AddFieldInMenu("Help", "Help-Info", "**Info-1**", "");
+            menusystem.AddFieldInMenu("Help", "Help-Fun", "**Fun-2**", "");
+            menusystem.AddFieldInMenu("Help", "Help-Misc", "**Misc-3**", "");
+            menusystem.AddFieldInMenu("Help", "Help-Admin", "**Admin-4**", "");
+            menusystem.AddFieldInMenu("Help", "", "", "Press one of the reaction numbers or send a number key to go to the numbered labeled menu.");
+            //Info menu
+
+            menusystem.AddFieldInMenu("Help-Info", "Info-serverinfo", "Server info-1", $"`{prefix}serverinfo`");
+            menusystem.AddFieldInMenu("Help-Info", "Info-userinfo", "User info-2", $"`{prefix}userinfo <user>`");
+            menusystem.AddFieldInMenu("Help-Info", "Info-roleinfo", "Role info-3", $"`{prefix}roleinfo <role>` ");
+            menusystem.AddFieldInMenu("Help-Info", "Info-channelinfo", "Channel info-4", $"`{prefix}channelinfo (channel)`");
+            menusystem.AddFieldInMenu("Help-Info", "Info-userpermissions", "User permissions-5", $"`{prefix}userperms <user>`");
+            menusystem.AddFieldInMenu("Help-Info", "Info-membercount", "Member count-6", $"`{prefix}membercount`");
+            menusystem.AddFieldInMenu("Help-Info", "Info-help", "Help-7", $"`{prefix}help`");
+            //Fun menu
+            menusystem.AddFieldInMenu("Help-Fun", "Fun-dog|cat", "Dog or Cat pictures-1", $"`{prefix}dog|{prefix}cat`");
+                menusystem.AddFieldInMenu("Help-Fun", "Fun-birb", "Birds-2 `", $"`{prefix}birb`");
+                menusystem.AddFieldInMenu("Help-Fun", "Fun-randomnumber", "Random number-3", $"`{prefix}randomnumber <number> || <minnumber> <maxnumber>`");
+                menusystem.AddFieldInMenu("Help-Fun", "Fun-choose", "Choose-4", $"`{prefix}choose (value)(value)(value)(value)(value)(value)..`");
+            //Misc menu
+            menusystem.AddFieldInMenu("Help-Misc", "Misc-rename", "Rename Users-1", $"`{prefix}rename <user> <nickname>{prefix}rename <role> <nickname>`");
+                menusystem.AddFieldInMenu("Help-Misc", "Misc-say", "Say-2 `", $"`{prefix}say <text>`");
+                menusystem.AddFieldInMenu("Help-Misc", "Misc-embed", "Embed text-3 `", $"`{prefix}embed (color) <title> <text>`");
+                menusystem.AddFieldInMenu("Help-Misc", "Misc-ping", "Ping&Pong-4", $"`{prefix}Ping|{prefix}Pong`");
+            //Admin menu
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-kick", "Kick-1", $"`{prefix}kick <user> (reason)`");
+                menusystem.AddFieldInMenu("Help-Admin", "Admin-ban", "Ban-2", $"`{prefix}ban <user> (reason)`");
+                menusystem.AddFieldInMenu("Help-Admin", "Admin-purge", "Purge-3", $"`{prefix}purge <amount>`");
+                menusystem.AddFieldInMenu("Help-Admin", "Admin-g&r_role", "Give and remove Roles-4", $"`{prefix}giverole <roletogive> <user>|<roletogive> <role> ||{prefix}removerole <roletoremove> <user>|<roletoremove> <role>`");
+                menusystem.AddFieldInMenu("Help-Admin", "Admin-changeprefix", "Change the Prefix-5", $"`{prefix}changePrefix <newprefix>`");
+                menusystem.AddFieldInMenu("Help-Admin", "Admin-defaultprefix", "Reset the Prefix-6", $"`{prefix}defaultprefix`");
+
+
+
+
+            try
+            {
+                await menusystem.DoCurrentMenuStuff(Context);
+            }
+            catch(Exception ex)
+            {
+                await ReplyAsync(ex.Message);
+            }
+
+        }
 
         [Command("Help", RunMode = RunMode.Async)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
@@ -562,5 +630,147 @@ namespace DiscordDestrucoBot.Modules
                     await helpMessage.RemoveReactionAsync(digits[digit], sender);
             }
         }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Depreciated
+/*
+            builder = new EmbedBuilder();
+            builder = menusystem.CurrentMenuEmbedBuilder(builder);
+
+            helpMessage = await Context.Channel.SendMessageAsync("", false, builder.Build());
+
+            Emoji[] digits = new Emoji[] {
+                new Emoji("\U00000030\U000020e3"), new Emoji("\U00000031\U000020e3"),
+                new Emoji("\U00000032\U000020e3"), new Emoji("\U00000033\U000020e3"),
+                new Emoji("\U00000034\U000020e3"), new Emoji("\U00000035\U000020e3")
+            , new Emoji("\U00000036\U000020e3"), new Emoji("\U00000037\U000020e3")
+            , new Emoji("\U00000038\U000020e3"), new Emoji("\U00000039\U000020e3")};
+            int[] digitCounts = new int[digits.Length];
+            Emoji back = new Emoji("🔄");
+
+            await helpMessage.UpdateAsync();
+
+            if (!helpMessage.Reactions.ContainsKey(digits[1]))
+                await helpMessage.AddReactionAsync(digits[1]);
+            if (!helpMessage.Reactions.ContainsKey(digits[2]))
+                await helpMessage.AddReactionAsync(digits[2]);
+            if (!helpMessage.Reactions.ContainsKey(digits[3]))
+                await helpMessage.AddReactionAsync(digits[3]);
+            if (!helpMessage.Reactions.ContainsKey(digits[4]))
+                await helpMessage.AddReactionAsync(digits[4]);
+
+
+
+
+            menusystem.ReturnCurrentMenu(out string menutitle, out string[][] menufields, out int menufieldcount);
+            int maxtimer = 50;
+
+            int timer = maxtimer;
+            string oldCurrentMenu = menusystem.CurrentMenu;
+            while (true)
+            {
+                int delaytime = 500;
+                await helpMessage.UpdateAsync();
+                for (int i = 1; i < helpMessage.Reactions.Count; i++)
+                    digitCounts[i] = helpMessage.Reactions.GetValueOrDefault(digits[i]).ReactionCount;
+
+
+                var channelmessages = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
+
+                //If a channel message contains a number and the menu field which that number is
+                //Does not have a menuGoto that is null set the menu to the menuGoto of the field
+                foreach (var message in channelmessages)
+                {
+                    for (int i = 1; i < menufieldcount + 1; i++)
+                        if (message.Content == (i.ToString()) && !string.IsNullOrWhiteSpace(menufields[i - 1][0]))
+                        {
+                            menusystem.SetCurrentMenu(menufields[i - 1][0]);
+                            await message.DeleteAsync();
+                        }
+                    if (message.Content == ("0"))
+                    {
+                        foreach (var sender in await helpMessage.GetReactionUsersAsync(back, 30).FlattenAsync())
+                            await helpMessage.RemoveReactionAsync(back, sender);
+
+                        string previousMenu = menusystem.GetPreviousMenu();
+                        if (previousMenu != null)
+                            menusystem.SetCurrentMenu(previousMenu);
+                        await message.DeleteAsync();
+                    }
+                }
+
+                //for every menu field if the emoji digit is bigger then 1
+                //and the menuGoto string is not null (the string that tells you what menu the field sends you to)
+                //Set the menu to the menuGoto of the field
+                for (int i = 1; i < menufieldcount + 1; i++)
+                    if (digitCounts[i] > 1 && !string.IsNullOrWhiteSpace(menufields[i -1][0]))
+                        menusystem.SetCurrentMenu(menufields[i - 1][0]);
+
+
+                if (helpMessage.Reactions.GetValueOrDefault(back).ReactionCount > 1)
+                {
+                    foreach (var sender in await helpMessage.GetReactionUsersAsync(back, 30).FlattenAsync())
+                        await helpMessage.RemoveReactionAsync(back, sender);
+
+                    string previousMenu = menusystem.GetPreviousMenu();
+                    if(previousMenu != null)
+                        menusystem.SetCurrentMenu(previousMenu);
+                }
+
+
+                if (oldCurrentMenu != menusystem.CurrentMenu)
+                {
+                    menusystem.ReturnCurrentMenu(out menutitle, out menufields, out menufieldcount);
+
+                    builder = new EmbedBuilder();
+                    builder.WithTitle(menutitle);
+                    for (int i = 0; i < menufieldcount; i++)
+                        builder.AddField(menufields[i][1], menufields[i][2], false);
+
+                    await helpMessage.ModifyAsync(msg => msg.Embed = builder.Build());
+                    timer = maxtimer;//Reset timer
+
+                    for(int i = 1; i < menufieldcount + 1; i++)
+                    {
+                        if (!helpMessage.Reactions.ContainsKey(digits[i]))
+                            await helpMessage.AddReactionAsync(digits[i]);
+                        else if (digitCounts[i] > 1)
+                            await RemoveAllButOneEmote(digits, helpMessage, i);
+                    }
+
+                    if (menusystem.CurrentMenu != "Help")
+                        await helpMessage.AddReactionAsync(back);
+
+                    oldCurrentMenu = menusystem.CurrentMenu;
+                }
+                
+
+                if (timer <= 0)
+                    break;
+                else if (timer - maxtimer / 4 <= 0)
+                    delaytime = (int)(delaytime / ((float)timer / maxtimer));
+                else if (timer - maxtimer / 2 <= 0)
+                    delaytime *= 2;
+
+                timer--;
+                await Task.Delay(delaytime);
+            }
+            */

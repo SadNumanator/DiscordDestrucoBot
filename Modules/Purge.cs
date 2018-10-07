@@ -90,7 +90,7 @@ namespace DiscordDestrucoBot.Modules
             var messages = await Context.Channel.GetMessagesAsync(800).FlattenAsync(); //purging is the value
             messages = messages.Where(msg => msg.Author.Id == userToPurge.Id).Take(purging);
             await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
-
+           
             if (purging >= 100)
                 purgemessage = @"```csharp
 #𝐈𝐧𝐧𝐨𝐜𝐞𝐧𝐭𝐬 𝐏𝐮𝐫𝐠𝐞𝐝!
