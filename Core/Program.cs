@@ -166,5 +166,15 @@ namespace DiscordDestrucoBot
             }
 
         }
+
+
+
+
+
+
+
+
+
+
     }
 }

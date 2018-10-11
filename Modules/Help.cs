@@ -17,9 +17,10 @@ namespace DiscordDestrucoBot.Modules
     {
 
 
-        [Command("newhelp", RunMode = RunMode.Async)]
+        [Command("Help", RunMode = RunMode.Async)]
+        [Alias("inform","helpme")]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
-        public async Task HelpCommandAsync([Remainder]string menu)
+        public async Task HelpCommandAsync()
         {
             //RestUserMessage helpMessage = null;
             //EmbedBuilder builder;
@@ -30,10 +31,10 @@ namespace DiscordDestrucoBot.Modules
 
             //Base menus
             menusystem.AddMenu("Help", null);
-            menusystem.AddMenu("Help-Admin", "Help", Color.Red);
-            menusystem.AddMenu("Help-Misc", "Help", Color.Green);
-            menusystem.AddMenu("Help-Fun", "Help", new Color(66, 226, 244));
-            menusystem.AddMenu("Help-Info", "Help", Color.Purple);
+            menusystem.AddMenu("Help-Info", "Help", false, Color.Purple);
+            menusystem.AddMenu("Help-Misc", "Help", false, Color.Green);
+            menusystem.AddMenu("Help-Fun", "Help", false, new Color(66, 226, 244));
+            menusystem.AddMenu("Help-Admin", "Help", false, Color.Red);
 
             //Starting help menu
             menusystem.AddFieldInMenu("Help", "Help-Info", "**Info-1**", "");
@@ -41,33 +42,107 @@ namespace DiscordDestrucoBot.Modules
             menusystem.AddFieldInMenu("Help", "Help-Misc", "**Misc-3**", "");
             menusystem.AddFieldInMenu("Help", "Help-Admin", "**Admin-4**", "");
             menusystem.AddFieldInMenu("Help", "", "", "Press one of the reaction numbers or send a number key to go to the numbered labeled menu.");
-            //Info menu
-
+            //Info menu//
+            //Serverinfo
             menusystem.AddFieldInMenu("Help-Info", "Info-serverinfo", "Server info-1", $"`{prefix}serverinfo`");
+            menusystem.AddMenu("Info-serverinfo", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-serverinfo", null, $"{prefix}serverinfo", "This will give info about the server/guild you are currently in.");
+            //Userinfo
             menusystem.AddFieldInMenu("Help-Info", "Info-userinfo", "User info-2", $"`{prefix}userinfo <user>`");
+            menusystem.AddMenu("Info-userinfo", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-userinfo", null, $"{prefix}userinfo <user>", "This will give info about the user you specify.");
+            //Roleinfo
             menusystem.AddFieldInMenu("Help-Info", "Info-roleinfo", "Role info-3", $"`{prefix}roleinfo <role>` ");
+            menusystem.AddMenu("Info-roleinfo", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-roleinfo", null, $"{prefix}roleinfo <role>", "This will give info about the role you specify.");
+            //Channelinfo
             menusystem.AddFieldInMenu("Help-Info", "Info-channelinfo", "Channel info-4", $"`{prefix}channelinfo (channel)`");
+            menusystem.AddMenu("Info-channelinfo", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-channelinfo", null, $"{prefix}channelinfo <channel>", "Will give info about the channel you specify.");
+            //UserPermissions
             menusystem.AddFieldInMenu("Help-Info", "Info-userpermissions", "User permissions-5", $"`{prefix}userperms <user>`");
+            menusystem.AddMenu("Info-userpermissions", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-userpermissions", null, $"{prefix}userperms <user>", "This will show all the available permission a user has in the channel its used in");
+            //MemberCount
             menusystem.AddFieldInMenu("Help-Info", "Info-membercount", "Member count-6", $"`{prefix}membercount`");
+            menusystem.AddMenu("Info-membercount", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-membercount", null, $"{prefix}membercount", "This shows the amount of members and the amount of bots and humans and the amount of users online.");
+            //Help
             menusystem.AddFieldInMenu("Help-Info", "Info-help", "Help-7", $"`{prefix}help`");
-            //Fun menu
-            menusystem.AddFieldInMenu("Help-Fun", "Fun-dog|cat", "Dog or Cat pictures-1", $"`{prefix}dog|{prefix}cat`");
-                menusystem.AddFieldInMenu("Help-Fun", "Fun-birb", "Birds-2 `", $"`{prefix}birb`");
-                menusystem.AddFieldInMenu("Help-Fun", "Fun-randomnumber", "Random number-3", $"`{prefix}randomnumber <number> || <minnumber> <maxnumber>`");
-                menusystem.AddFieldInMenu("Help-Fun", "Fun-choose", "Choose-4", $"`{prefix}choose (value)(value)(value)(value)(value)(value)..`");
-            //Misc menu
-            menusystem.AddFieldInMenu("Help-Misc", "Misc-rename", "Rename Users-1", $"`{prefix}rename <user> <nickname>{prefix}rename <role> <nickname>`");
-                menusystem.AddFieldInMenu("Help-Misc", "Misc-say", "Say-2 `", $"`{prefix}say <text>`");
-                menusystem.AddFieldInMenu("Help-Misc", "Misc-embed", "Embed text-3 `", $"`{prefix}embed (color) <title> <text>`");
-                menusystem.AddFieldInMenu("Help-Misc", "Misc-ping", "Ping&Pong-4", $"`{prefix}Ping|{prefix}Pong`");
-            //Admin menu
-            menusystem.AddFieldInMenu("Help-Admin", "Admin-kick", "Kick-1", $"`{prefix}kick <user> (reason)`");
-                menusystem.AddFieldInMenu("Help-Admin", "Admin-ban", "Ban-2", $"`{prefix}ban <user> (reason)`");
-                menusystem.AddFieldInMenu("Help-Admin", "Admin-purge", "Purge-3", $"`{prefix}purge <amount>`");
-                menusystem.AddFieldInMenu("Help-Admin", "Admin-g&r_role", "Give and remove Roles-4", $"`{prefix}giverole <roletogive> <user>|<roletogive> <role> ||{prefix}removerole <roletoremove> <user>|<roletoremove> <role>`");
-                menusystem.AddFieldInMenu("Help-Admin", "Admin-changeprefix", "Change the Prefix-5", $"`{prefix}changePrefix <newprefix>`");
-                menusystem.AddFieldInMenu("Help-Admin", "Admin-defaultprefix", "Reset the Prefix-6", $"`{prefix}defaultprefix`");
+            menusystem.AddMenu("Info-help", "Help-Info", true, Color.Purple);
+            menusystem.AddFieldInMenu("Info-help", null, $"{prefix}Help", "**Help Me!**");
 
+
+            //Fun menu//
+            //DogAndCat
+            menusystem.AddFieldInMenu("Help-Fun", "Fun-dog|cat", "Dog or Cat pictures-1", $"`{prefix}dog|{prefix}cat`");
+            menusystem.AddMenu("Fun-dog|cat", "Help-Fun", true, new Color(66, 226, 244));
+            menusystem.AddFieldInMenu("Fun-dog|cat", null, $"{prefix}dog\n{prefix}cat", "This takes a random picture off who knows where of either a dog or cat and sends it here.");
+            //Birb
+            menusystem.AddFieldInMenu("Help-Fun", "Fun-birb", "Birds-2", $"`{prefix}birb`");
+            menusystem.AddMenu("Fun-birb", "Help-Fun", true, new Color(66, 226, 244));
+            menusystem.AddFieldInMenu("Fun-birb", null, $"{prefix}birb", "This command sends memes of ~~birds~~ **birbs**.");
+            //Randomnumber
+            menusystem.AddFieldInMenu("Help-Fun", "Fun-randomnumber", "Random number-3", $"`{prefix}randomnumber <number> || <minnumber> <maxnumber>`");
+            menusystem.AddMenu("Fun-randomnumber", "Help-Fun", true, new Color(66, 226, 244));
+            menusystem.AddFieldInMenu("Fun-randomnumber", null, $"{prefix}randomnumber <MaxNumber> \n{prefix}randomnumber <MinNumber> <MaxNumber>", $"This can either send a number between 0 and whatever one number you pick `{prefix}randomnumber 10` this will return a number between 0 and 10.\n" +
+                            $"If you input two numbers, it will get a number between them both `{prefix}randomnumber 50 100` this will return a number between 50 and 100.");
+            //Choose
+            menusystem.AddFieldInMenu("Help-Fun", "Fun-choose", "Choose-4", $"`{prefix}choose (value)(value)(value)(value)(value)(value)..`");
+            menusystem.AddMenu("Fun-choose", "Help-Fun", true, new Color(66, 226, 244));
+            menusystem.AddFieldInMenu("Fun-choose", null, $"{prefix}choose", $"This will choose a value you give it, for example if you give it 10 43 and 71 `{prefix}choose 10 43 71` it will randomly pick one of those 3 values.");
+
+            //Misc menu//
+            //Rename
+            menusystem.AddFieldInMenu("Help-Misc", "Misc-rename", "Rename Users-1", $"`{prefix}rename <user> <nickname>{prefix}rename <role> <nickname>`");
+            menusystem.AddMenu("Misc-rename", "Help-Misc", true, Color.Green);
+            menusystem.AddFieldInMenu("Misc-rename", null, $"{prefix}rename users <user> <nickname> \n{prefix}rename <role> <nickname>", "This can either rename a single user \n" +
+                            "or it can rename every user that has a specified role");
+            //Say
+            menusystem.AddFieldInMenu("Help-Misc", "Misc-say", "Say-2 `", $"`{prefix}say <text>`");
+            menusystem.AddMenu("Misc-say", "Help-Misc", true, Color.Green);
+            menusystem.AddFieldInMenu("Misc-say", null, $"{prefix}say", $" Did someone {prefix}say Thunderfury, Blessed Blade of the Windseeker? ");
+            //Embed
+            menusystem.AddFieldInMenu("Help-Misc", "Misc-embed", "Embed text-3 `", $"`{prefix}embed (color) <title> <text>`");
+            menusystem.AddMenu("Misc-embed", "Help-Misc", true, Color.Green);
+            menusystem.AddFieldInMenu("Misc-embed", null, $"{prefix}embed (color) <title> (text)", "This allows you to input a color, a title, and text\n" +
+                            $"If you only input one argument it becomes just the title, if you input two and the first one is a color it becomes a title with a color \n" +
+                            $"If you input 2 arguments without the first one being a color it becomes the title and some text \n" +
+                            $"3 arguments would be the color the title and the text, all this creates a embed which the bot says");
+            //Ping
+            menusystem.AddFieldInMenu("Help-Misc", "Misc-ping", "Ping&Pong-4", $"`{prefix}Ping|{prefix}Pong`");
+            menusystem.AddMenu("Misc-ping", "Help-Misc", true, Color.Green);
+            menusystem.AddFieldInMenu("Misc-ping", null, $"{prefix}ping \n{prefix}pong", "The bot is not happy with what you serve, so it returns it right away");
+
+            //Admin menu//
+            //Kick
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-kick", "Kick-1", $"`{prefix}kick <user> (reason)`");
+            menusystem.AddMenu("Admin-kick", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-kick", null, $"{prefix}kick <user> (reason)", "For when your pal says @everyone");
+            //Ban
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-ban", "Ban-2", $"`{prefix}ban <user> (reason)`");
+            menusystem.AddMenu("Admin-ban", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-ban", null, $"{prefix}ban <user> (reason)", "For bringing down the ban hammer");
+            //Purge
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-purge", "Purge-3", $"`{prefix}purge <amount>`");
+            menusystem.AddMenu("Admin-purge", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-purge", null, $"{prefix}purge <amount>", "when you want to PURGE THE INNOCENTS.  \n" +
+                            "This command allows you to remove a specified amount of messages");
+            //GiveAndRemoveRoles
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-GiveAndRemoveRoles", "Give and remove Roles-4", $"`{prefix}giverole <roletogive> <user>|<roletogive> <role> ||{prefix}removerole <roletoremove> <user>|<roletoremove> <role>`");
+            menusystem.AddMenu("Admin-GiveAndRemoveRoles", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-GiveAndRemoveRoles", null, $"{prefix}giverole <roletogive> <user>|<roletogive> <role> ||\n{prefix}removerole <roletoremove> <user>|<roletoremove> <role>",
+                            "This allows you to give or remove a role from a specified user \n" +
+                            "If you are a admin it also allows you to give or remove a role to every user in a specified role");
+            //ChangePrefix
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-changeprefix", "Change the Prefix-5", $"`{prefix}changePrefix <newprefix>`");
+            menusystem.AddMenu("Admin-changeprefix", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-changeprefix", null, $"{prefix}changeprefix <newprefix>", $"This changes the {prefix}prefix to the text you choose \n" +
+                            $"Remember you can use {Context.Client.CurrentUser.Mention} as a prefix as well (mentioning the bot)");
+            //DefaultPrefix
+            menusystem.AddFieldInMenu("Help-Admin", "Admin-defaultprefix", "Reset the Prefix-6", $"`{prefix}defaultprefix`");
+            menusystem.AddMenu("Admin-defaultprefix", "Help-Admin", true, Color.Red);
+            menusystem.AddFieldInMenu("Admin-defaultprefix", null, $"{prefix}defaultprefix", $"Changes the prefix back to the default which is {Config.bot.defaultcmdPrefix}");
 
 
 
@@ -77,11 +152,12 @@ namespace DiscordDestrucoBot.Modules
             }
             catch(Exception ex)
             {
-                await ReplyAsync(ex.Message);
+                await ReplyAsync(ex.ToString());
             }
 
         }
 
+        /*
         [Command("Help", RunMode = RunMode.Async)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task HelpCommandAsync()
@@ -630,6 +706,7 @@ namespace DiscordDestrucoBot.Modules
                     await helpMessage.RemoveReactionAsync(digits[digit], sender);
             }
         }
+        */
 
     }
 }

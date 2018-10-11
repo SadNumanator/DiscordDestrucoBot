@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DiscordDestrucoBot
 {
-    class DataStorage
+    static class DataStorage
     {
         private static Dictionary<string, string> pairs = new Dictionary<string, string>();
 
