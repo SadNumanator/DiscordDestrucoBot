@@ -354,7 +354,7 @@ namespace DiscordDestrucoBot.Modules
                     if (timer <= 0)
                         break;
                     else if (timer - maxtimer / 4 <= 0)
-                        delaytime = (int) (delaytime / ((float) timer / maxtimer));
+                        delaytime *= 4;
                     else if (timer - maxtimer / 2 <= 0)
                         delaytime *= 2;
 

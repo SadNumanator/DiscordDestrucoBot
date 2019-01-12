@@ -150,15 +150,9 @@ namespace DiscordDestrucoBot
 
 
 
-            else if (messagestring == "!iamcat")
+            else if (messagestring == "999")
             {
-                EmbedBuilder builder = new EmbedBuilder();//Make the embed builder that makes the embed
-
-                builder.WithTitle("MEOW!")
-                    .WithColor(Color.Green)
-                    .WithDescription(">.><.<");
-
-                await contex.Channel.SendMessageAsync("", false, builder.Build());//This here makes the bot print the embed
+                await contex.Channel.SendMessageAsync("1000");
             }
             else if (messagestring.Contains($"{contex.Client.CurrentUser.Id}"))
             {

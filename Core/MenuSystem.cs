@@ -15,9 +15,9 @@ namespace DiscordDestrucoBot
     public class MenuSystem
     {
 
-        private Dictionary<string, string[]> Menus = new Dictionary<string, string[]>();
-        private Dictionary<string, string[]> MenuFields = new Dictionary<string, string[]>();
-        private Dictionary<string, int> menuLevelCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, string[]> Menus = new Dictionary<string, string[]>();
+        private readonly Dictionary<string, string[]> MenuFields = new Dictionary<string, string[]>();
+        private readonly Dictionary<string, int> menuLevelCount = new Dictionary<string, int>();
         public string CurrentMenu { get; private set; } = null;
         public string StartingMenu { get; private set; } = null;
         private int maxtimer;

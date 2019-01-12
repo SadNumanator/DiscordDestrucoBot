@@ -34,3 +34,9 @@ bin/Debug/netcoreapp2.1/opus.dll.checksums
 *.ogg
 *.checksums
 bin/Debug/netcoreapp2.1/ffmpeg.exe
+bin/Release/netcoreapp2.1/AudioStuff/sox.exe
+bin/Release/netcoreapp2.1/AudioStuff/ffmpeg.exe
+bin/Release/netcoreapp2.1/AudioStuff/openmpt123.exe
+bin/Debug/netcoreapp2.1/AudioStuff/sox.exe
+bin/Debug/netcoreapp2.1/AudioStuff/openmpt123.exe
+bin/Debug/netcoreapp2.1/AudioStuff/ffmpeg.exe
