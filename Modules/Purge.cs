@@ -15,6 +15,8 @@ namespace DiscordDestrucoBot.Modules
     public class Purge : ModuleBase<SocketCommandContext>
     {
 
+
+
         //RunMode = RunMode.Async is required for setting delays
         [Command("purge", RunMode = RunMode.Async)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
@@ -151,5 +153,7 @@ namespace DiscordDestrucoBot.Modules
             await Task.Delay(3000); //starting delay
             await toDelete.DeleteAsync();
         }
+
+
     }
 }

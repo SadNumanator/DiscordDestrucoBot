@@ -3,7 +3,10 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordDestrucoBot
@@ -86,6 +89,7 @@ namespace DiscordDestrucoBot
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
+        string noUCheck_Old = "";
         private async Task HandleCommandAsync(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
@@ -145,10 +149,18 @@ namespace DiscordDestrucoBot
                 
                 string messagestring = message.Content.ToLowerInvariant();//convert the message to lowercase and put it in a string
 
-            if (messagestring.Contains("no u"))//if the message contains no u
+            string noUCheck = RemoveDiacritics(messagestring);
+            noUCheck.Replace("0", "o");
+            noUCheck.Replace("○", "o");
+            noUCheck.Replace("regional_indicator_", "");
+            char[] arr = noUCheck.Where(c => char.IsLetterOrDigit(c)).ToArray();
+
+            noUCheck = new string(arr);
+            if ((noUCheck.Contains("u") && (noUCheck_Old.Contains("no") || noUCheck_Old.Contains("nu"))) || noUCheck.Contains("nou") || noUCheck.Contains("nou"))//if the message contains no u
+            {
                 await contex.Channel.SendMessageAsync("no u");//send the message
-
-
+                noUCheck = "";
+            }
 
             else if (messagestring == "999")
             {
@@ -158,6 +170,7 @@ namespace DiscordDestrucoBot
             {
                 await contex.Channel.SendMessageAsync("**No**");
             }
+            noUCheck_Old = noUCheck;
 
         }
 
@@ -168,7 +181,21 @@ namespace DiscordDestrucoBot
 
 
 
+        static string RemoveDiacritics(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
 
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
 
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
     }
 }
