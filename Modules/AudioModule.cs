@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
@@ -16,6 +17,10 @@ public class AudioModule : ModuleBase<ICommandContext>
     [Command("join", RunMode = RunMode.Async)]
     public async Task JoinCmd(IVoiceChannel channel = null)
     {
+        if (!File.Exists("ffmpeg.exe"))
+        {
+            await Context.Channel.SendMessageAsync("This feature is only enabled for the test build of this bot"); return;
+        }
         await LeaveCmd();
         await _service.JoinAudio(Context.Guild, channel ?? (Context.User as IVoiceState).VoiceChannel);
     }

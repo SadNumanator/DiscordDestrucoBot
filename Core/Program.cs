@@ -149,20 +149,7 @@ namespace DiscordDestrucoBot
                 
                 string messagestring = message.Content.ToLowerInvariant();//convert the message to lowercase and put it in a string
 
-            string noUCheck = RemoveDiacritics(messagestring);
-            noUCheck.Replace("0", "o");
-            noUCheck.Replace("○", "o");
-            noUCheck.Replace("regional_indicator_", "");
-            char[] arr = noUCheck.Where(c => char.IsLetterOrDigit(c)).ToArray();
-
-            noUCheck = new string(arr);
-            if ((noUCheck.Contains("u") && (noUCheck_Old.Contains("no") || noUCheck_Old.Contains("nu"))) || noUCheck.Contains("nou") || noUCheck.Contains("nou"))//if the message contains no u
-            {
-                await contex.Channel.SendMessageAsync("no u");//send the message
-                noUCheck = "";
-            }
-
-            else if (messagestring == "999")
+            if (messagestring == "999")
             {
                 await contex.Channel.SendMessageAsync("1000");
             }
@@ -170,7 +157,6 @@ namespace DiscordDestrucoBot
             {
                 await contex.Channel.SendMessageAsync("**No**");
             }
-            noUCheck_Old = noUCheck;
 
         }
 

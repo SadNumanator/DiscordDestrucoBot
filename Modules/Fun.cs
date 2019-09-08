@@ -595,8 +595,17 @@ namespace DiscordDestrucoBot.Modules
         public async Task PickBetweenAsync(params string[] options)
         {
             int picked = Program.rnd.Next(options.Count());
-
-            await ReplyAsync(options[picked]);
+            string message = options[picked];
+            if (message.Contains("@everyone"))
+            {
+                message = message.Replace("@everyone", "@ everyone");
+            }
+            if (message.Contains("@here"))
+            {
+                message = message.Replace("@here", "@ here");
+            }
+            Console.WriteLine(message);
+            await ReplyAsync(message);
         }
 
         long LongRandom(long min, long max, Random rand)

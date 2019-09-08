@@ -46,9 +46,32 @@ namespace DiscordDestrucoBot.Modules
                 await ReplyAsync("Your role must be equal to or higher to assign the nickname"); return;
             }
 
+            if(name == ".default.")//For removing nicknames
+            {
+                name = "";
+            }
             await userArg.ModifyAsync(x => { x.Nickname = name; });
 
-            RestUserMessage toDelete = await Context.Channel.SendMessageAsync($"{userArg.Username}s Nickname has changed to {name}");
+            string sentMessage;
+            if (name != "")
+            {
+                sentMessage = $"{userArg.Username}s Nickname has changed to {name}";
+
+                if (sentMessage.Contains("@everyone"))
+                {
+                    sentMessage.Replace("@everyone", "@ everyone");
+                }
+                if (sentMessage.Contains("@here"))
+                {
+                    sentMessage.Replace("@here", "@ here");
+                }
+            }
+            else
+            {
+                sentMessage = $"{userArg.Username}s Nickname has been removed";
+            }
+
+            RestUserMessage toDelete = await Context.Channel.SendMessageAsync(sentMessage);
             await Task.Delay(4000); //starting delay
             await toDelete.DeleteAsync();
         }
@@ -64,6 +87,11 @@ namespace DiscordDestrucoBot.Modules
                 await ReplyAsync("Nickname must be equal to or under 32 characters"); return;
             }
 
+            if (name == ".default.")//For removing nicknames
+            {
+                name = "";
+            }
+
             int amountchanged = 0;
             var botuser = Context.Guild.GetUser(Context.Client.CurrentUser.Id);
             foreach (SocketGuildUser userArg in roleArg.Members) {
@@ -73,8 +101,24 @@ namespace DiscordDestrucoBot.Modules
                 await userArg.ModifyAsync(x => { x.Nickname = name; });
                 amountchanged++;
             }
-
-            await ReplyAsync($"{amountchanged} users have had their nicknames changed to {name} by {Context.User.Mention}");
+            string sentMessage;
+            if (name != "")
+            {
+                sentMessage = $"{amountchanged} users have had their nicknames changed to {name} by {Context.User.Mention}";
+                if (sentMessage.Contains("@everyone"))
+                {
+                    sentMessage.Replace("@everyone", "@ everyone");
+                }
+                if (sentMessage.Contains("@here"))
+                {
+                    sentMessage.Replace("@here", "@ here");
+                }
+            }
+            else
+            {
+                sentMessage = $"{amountchanged} users have had their nicknames removed by {Context.User.Mention}";
+            }
+            await ReplyAsync(sentMessage);
         }
 
 

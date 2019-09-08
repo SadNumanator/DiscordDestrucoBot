@@ -97,7 +97,7 @@ namespace DiscordDestrucoBot.Modules
             menusystem.AddFieldInMenu("Help-Misc", "Misc-rename", "Rename Users-1", $"`{prefix}rename <user> <nickname>{prefix}rename <role> <nickname>`");
             menusystem.AddMenu("Misc-rename", "Help-Misc", true, Color.Green);
             menusystem.AddFieldInMenu("Misc-rename", null, $"{prefix}rename users <user> <nickname> \n{prefix}rename <role> <nickname>", "This can either rename a single user \n" +
-                            "or it can rename every user that has a specified role");
+                            "or it can rename every user that has a specified role\n Use .default. to remove the users nickname");
             //Say
             menusystem.AddFieldInMenu("Help-Misc", "Misc-say", "Say-2 `", $"`{prefix}say <text>`");
             menusystem.AddMenu("Misc-say", "Help-Misc", true, Color.Green);

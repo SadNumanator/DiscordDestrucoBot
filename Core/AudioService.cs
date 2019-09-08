@@ -52,10 +52,6 @@ public class AudioService
 
     public async Task SendAudioAsync(IGuild guild, IMessageChannel channel, string path)
     {
-        if (!File.Exists("ffmpeg.exe"))
-        {
-            await channel.SendMessageAsync("This feature is only enabled for the test build of this bot"); return;
-        }
         // Your task: Get a full path to the file if the value of 'path' is only a filename.
         if (!File.Exists(path))
         { 

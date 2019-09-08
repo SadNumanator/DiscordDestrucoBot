@@ -21,6 +21,14 @@ namespace DiscordDestrucoBot.Modules
         [Command("convert", RunMode = RunMode.Async), RequireUserPermission(GuildPermission.Administrator)]
         public async Task AudioConversationAsync(string strquality = "4", string outputFileType = "ogg")
         {
+            if (!File.Exists("AudioStuff/sox.exe"))
+            {
+                await Context.Channel.SendMessageAsync("This feature is only enabled for the test build of this bot"); return;
+            }
+            //if (Context.Message.Author.Id != 196475292888465410)
+            //{
+            //    await ReplyAsync("This command has been disabled for everyone but the creator of this bot"); return;
+            //}
 
             string attachmentID = Context.Message.Attachments.FirstOrDefault().Id.ToString();
             Directory.CreateDirectory(attachmentID);
