@@ -4,9 +4,11 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
-using System.Text;
+using System.Text; 
 using System.Threading.Tasks;
 
 namespace DiscordDestrucoBot
@@ -89,7 +91,6 @@ namespace DiscordDestrucoBot
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
-        string noUCheck_Old = "";
         private async Task HandleCommandAsync(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
@@ -148,7 +149,7 @@ namespace DiscordDestrucoBot
 
             string messagestring = message.Content.ToLowerInvariant();//convert the message to lowercase and put it in a string
 
-            if (contex.Channel.Name == "haiku-hell")
+            if (contex.Channel.Name == "testing")
             {
                 //await contex.Channel.SendMessageAsync(isThisHaiku(messagestring) ? "true" : "false");
                 if (!isThisHaiku(messagestring))
@@ -192,18 +193,42 @@ namespace DiscordDestrucoBot
                              char.IsWhiteSpace(c))).ToArray();
 
                     strarray[i] = new string(arr);
+                    int Syllablecount = 0;
+
 
                     string[] wordarray = strarray[i].Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);//seperate each word into array
 
-                    int Syllablecount = 0;
                     for (uint j = 0; j < wordarray.Length; j++)//Count every syllable in sentence
                     {
-                        int syllableword = 0;
+                        int syllableword = 0;//How many syllables this word is
 
-                        syllableword += SyllableCount(wordarray[j]);
+                        WebClient wc = new WebClient();
+                        string webData = wc.DownloadString("http://api.datamuse.com/words?sp=" + wordarray[j] + "&md=s&max=1");
 
-                        Syllablecount += syllableword;
+                        //Console.WriteLine(webData);
+                        syllableword = webData.LastIndexOf(':');//Stores index of string number
+
+                        if (syllableword != -1)
+                        {
+                            webData = webData.Substring(syllableword);
+
+                            arr = webData.Where(c => char.IsDigit(c)).ToArray();
+                            webData = new string(arr);
+
+                            syllableword = int.Parse(webData);
+
+                            Syllablecount += syllableword;
+                        }
+                        else
+                        {
+                            syllableword += SyllableCount(wordarray[j]);
+
+                            Syllablecount += syllableword;
+                        }
+                        //Console.WriteLine(wordarray[j] + "=" + syllableword);
                     }
+                    
+
 
                     if (i == 1)//If middle line
                     {
@@ -275,8 +300,6 @@ namespace DiscordDestrucoBot
 
             if (count == 0)//If the word is somehow 0 syllables (be and ree are) 
                 count = 1;//make sure it has at least one
-
-            //Console.WriteLine(word + "=" + count);
 
             return count;
         }
