@@ -103,18 +103,6 @@ namespace DiscordDestrucoBot
 
             var contex = new SocketCommandContext(_client, message);
 
-
-            if (contex.Channel.Name == "haiku-hell")
-            {
-                //await contex.Channel.SendMessageAsync(isThisHaiku(messagestring) ? "true" : "false");
-                if (!isThisHaiku(message.Content.ToLowerInvariant()))
-                {
-                    await contex.Message.DeleteAsync();
-                    return;
-                }
-            }
-
-
             if (message.HasStringPrefix(DataStorage.GetPrefixValue(contex.Guild.Id.ToString()), ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
 
