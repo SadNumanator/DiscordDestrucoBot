@@ -103,6 +103,18 @@ namespace DiscordDestrucoBot
 
             var contex = new SocketCommandContext(_client, message);
 
+
+            if (contex.Channel.Name == "haiku-hell")
+            {
+                //await contex.Channel.SendMessageAsync(isThisHaiku(messagestring) ? "true" : "false");
+                if (!isThisHaiku(message.Content.ToLowerInvariant()))
+                {
+                    await contex.Message.DeleteAsync();
+                    return;
+                }
+            }
+
+
             if (message.HasStringPrefix(DataStorage.GetPrefixValue(contex.Guild.Id.ToString()), ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
 
@@ -148,16 +160,6 @@ namespace DiscordDestrucoBot
 
 
             string messagestring = message.Content.ToLowerInvariant();//convert the message to lowercase and put it in a string
-
-            if (contex.Channel.Name == "testing")
-            {
-                //await contex.Channel.SendMessageAsync(isThisHaiku(messagestring) ? "true" : "false");
-                if (!isThisHaiku(messagestring))
-                {
-                    await contex.Message.DeleteAsync();
-                    return;
-                }
-            }
 
             if (messagestring == "999")
             {
