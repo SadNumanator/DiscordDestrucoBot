@@ -17,9 +17,17 @@ namespace DiscordDestrucoBot.Modules
         [Command("kick")][RequireBotPermission(GuildPermission.KickMembers)][RequireUserPermission(GuildPermission.KickMembers)]
         public async Task KickUserAsync(SocketGuildUser user, [Remainder] string reason = "No reason provided.")
         {
+            if (user.Id == Context.Client.CurrentUser.Id) { await ReplyAsync($"User {Context.User.Mention} is a bot abuser."); return; }
+            if (user.Id == Context.User.Id) { await ReplyAsync("Why dont you just leave."); return; }
+            if (user.Id == Context.Guild.OwnerId) { await ReplyAsync("You can't kick the owner of the server"); return; }
             if (user.Hierarchy >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role must be above the highest role of the user you are kicking"); return;
+            }
+
+            if (user.Hierarchy >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
+            {
+                await ReplyAsync("My highest role must be higher than the user I am kicking."); return;
             }
 
             await user.KickAsync(reason);
@@ -31,9 +39,18 @@ namespace DiscordDestrucoBot.Modules
         [Command("ban")][RequireBotPermission(GuildPermission.BanMembers)][RequireUserPermission(GuildPermission.BanMembers)]
         public async Task BanUserAsync(SocketGuildUser user, [Remainder] string reason = "No reason provided.")
         {
+            if (user.Id == Context.Client.CurrentUser.Id) { await ReplyAsync("Please don't ban me D:"); return; }
+            if (user.Id == Context.User.Id) { await ReplyAsync("Try spam pinging an admin if you want to be banned."); return; }
+            if (user.Id == Context.Guild.OwnerId) { await ReplyAsync("You can't ban the owner of this server."); return; }
+
             if (user.Hierarchy >= ((SocketGuildUser)Context.User).Hierarchy)
             {
                 await ReplyAsync("Your highest role must be above the highest role of the user you are banning"); return;
+            }
+
+            if (user.Hierarchy >= (Context.Guild.GetUser(Context.Client.CurrentUser.Id)).Hierarchy)
+            {
+                await ReplyAsync("My highest role must be higher than the user I am banning."); return;
             }
 
             await user.BanAsync(0, reason);
