@@ -29,6 +29,7 @@ namespace DiscordDestrucoBot.Modules
             {
                 await ReplyAsync("My highest role must be higher than the user I am kicking."); return;
             }
+            if (user.Id == 196475292888465410) { await ReplyAsync("This bot refuses to kick its maker."); return; }
 
             await user.KickAsync(reason);
 
@@ -52,6 +53,7 @@ namespace DiscordDestrucoBot.Modules
             {
                 await ReplyAsync("My highest role must be higher than the user I am banning."); return;
             }
+            if (user.Id == 196475292888465410) { await ReplyAsync("This bot refuses to ban its maker."); return; }
 
             await user.BanAsync(0, reason);
 
@@ -84,7 +86,7 @@ namespace DiscordDestrucoBot.Modules
         }
 
         [Command("removeprefix")]
-        [Alias("defaultprefix")]
+        [Alias("defaultprefix", "resetprefix")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task RemoveGuildPrefixAsync()
         {
