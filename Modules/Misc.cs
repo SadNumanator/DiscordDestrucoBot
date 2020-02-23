@@ -59,11 +59,11 @@ namespace DiscordDestrucoBot.Modules
 
                 if (sentMessage.Contains("@everyone"))
                 {
-                    sentMessage.Replace("@everyone", "@ everyone");
+                    sentMessage.Replace("@everyone", "@​everyone");
                 }
                 if (sentMessage.Contains("@here"))
                 {
-                    sentMessage.Replace("@here", "@ here");
+                    sentMessage.Replace("@here", "@​here");
                 }
             }
             else
@@ -117,6 +117,39 @@ namespace DiscordDestrucoBot.Modules
             else
             {
                 sentMessage = $"{amountchanged} users have had their nicknames removed by {Context.User.Mention}";
+            }
+            await ReplyAsync(sentMessage);
+        }
+
+        [Command("rename_regex")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.ManageNicknames)]
+        public async Task ChangeNick_RegexAsync(SocketRole roleArg, [Remainder] string name)
+        {
+            if (name.Length > 32)
+            {
+                await ReplyAsync("Nickname must be equal to or under 32 characters"); return;
+            }
+
+            int amountchanged = 0;
+            var botuser = Context.Guild.GetUser(Context.Client.CurrentUser.Id);
+            foreach (SocketGuildUser userArg in roleArg.Members)
+            {
+                if (userArg.Hierarchy >= botuser.Hierarchy)
+                    continue;
+
+                await userArg.ModifyAsync(x => { x.Nickname = name; });
+                amountchanged++;
+            }
+            string sentMessage;
+            sentMessage = $"{amountchanged} users have had their nicknames changed to {name} by {Context.User.Mention}";
+            if (sentMessage.Contains("@everyone"))
+            {
+                sentMessage.Replace("@everyone", "@ everyone");
+            }
+            if (sentMessage.Contains("@here"))
+            {
+                sentMessage.Replace("@here", "@ here");
             }
             await ReplyAsync(sentMessage);
         }

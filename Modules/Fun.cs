@@ -598,11 +598,11 @@ namespace DiscordDestrucoBot.Modules
             string message = options[picked];
             if (message.Contains("@everyone"))
             {
-                message = message.Replace("@everyone", "@ everyone");
+                message = message.Replace("@everyone", "@​everyone");
             }
             if (message.Contains("@here"))
             {
-                message = message.Replace("@here", "@ here");
+                message = message.Replace("@here", "@​here");
             }
             Console.WriteLine(message);
             await ReplyAsync(message);
@@ -625,12 +625,18 @@ namespace DiscordDestrucoBot.Modules
 
             if (choice == "r")
                 choice = "rock";
+            else if (choice == "p")
+                choice = "paper";
+            else if (choice == "s")
+                choice = "scissor";
+            else if (choice == "scissors")
+                choice = "scissor";
 
-            if (choice == "gun" || choice == "shoot"|| choice == "pew")
+            else if (choice == "gun" || choice == "shoot"|| choice == "pew")
             {
                 await ReplyAsync("**Dead**"); return;
             }
-            if (choice == "dynamite" || choice == "rpg")
+            else if (choice == "dynamite" || choice == "rpg")
             {
                 await ReplyAsync("**Boom**"); return;
             }
@@ -665,7 +671,7 @@ namespace DiscordDestrucoBot.Modules
                 await ReplyAsync($"The computer threw paper and you threw {choice}, **you tie!**");
                 return;
             }
-            else
+            else if (choice == "scissor")
             {
                 if(compChoice == 0)
                 {
@@ -679,6 +685,18 @@ namespace DiscordDestrucoBot.Modules
                 }
                 await ReplyAsync($"The computer threw scissors and you threw {choice}, **you tie!**");
                 return;
+            }
+            else
+            {
+                if (choice.Contains("@everyone"))
+                {
+                    choice = choice.Replace("@everyone", "@​everyone");
+                }
+                if (choice.Contains("@here"))
+                {
+                    choice = choice.Replace("@here", "@​here");
+                }
+                await ReplyAsync($"{choice} is not a valid rock paper scissors choice");
             }
 
 

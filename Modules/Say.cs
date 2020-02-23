@@ -37,8 +37,8 @@ namespace DiscordDestrucoBot.Modules
         {
 
 
-            argumentname = argumentname.Replace("@everyone", "@ everyone");
-            argumentname = argumentname.Replace("@here", "@ here");
+            argumentname = argumentname.Replace("@everyone", "@​everyone");
+            argumentname = argumentname.Replace("@here", "@​here");
 
             await SayAsync(argumentname);
         }
